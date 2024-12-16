@@ -1,11 +1,5 @@
-#include "appUtils.h"
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <algorithm>
-#include <cstdio>
+#include "./include/appUtils.h"
+
 using std::ofstream;
 using std::fstream;
 using std::ifstream;
@@ -242,23 +236,4 @@ bool app::validasiAdmin (std::string inptusername, std::string inptpassword) {
 
 int app::ambilJumlahData () {
     return database.size();
-}
-
-void menuLogin () {
-    std::cout << "========== Login ==========" << std::endl;
-    std::cout << "1. " << "User" << std::endl;
-    std::cout << "2. " << "Admin" << std::endl;
-    std::cout << "3. " << "Keluar program" << std::endl;
-}
-
-void menuAdmin () {
-    std::cout << "========== Library System ==========" << std::endl;
-    std::cout << "1. Tambah data buku" << std::endl;
-    std::cout << "2. Hapus data buku" << std::endl;
-    std::cout << "3. Edit data buku" << std::endl;
-    std::cout << "4. Cari data buku" << std::endl;
-    std::cout << "5. Tampilkan data buku" << std::endl;
-    std::cout << "6. Export data buku" << std::endl;
-    std::cout << "7. Buat database sql" << std::endl;
-    std::cout << "8. keluar program" << std::endl;
 }

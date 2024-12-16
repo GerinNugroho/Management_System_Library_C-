@@ -1,6 +1,11 @@
 #pragma once
-#include <string>
+#include <iostream>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <cstdio>
 
 struct stuctureData {
     std::string judul;
@@ -27,7 +32,5 @@ public:
     void inisialiasiUser();
     bool editDataBuku(std::string input);
     bool validasiAdmin(std::string username, std::string password);
+    void test();
 };
-
-void menuLogin ();
-void menuAdmin ();
