@@ -3,17 +3,19 @@
 #include <stdlib.h>
 using namespace std;
 
-int main () {
+int main()
+{
     interfaces interface;
 
     interface.initUser();
 
-    login:
-    if(!interface.loginUser()) {
+login:
+    if (!interface.loginUser())
+    {
         goto login;
     }
-    
-    menu:
+
+menu:
     switch (interface.menu())
     {
     case '1':

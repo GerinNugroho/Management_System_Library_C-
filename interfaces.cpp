@@ -1,18 +1,29 @@
 #include "./include/interfaces.h"
 
-void interfaces::initUser () {
+void interfaces::initUser()
+{
     utils.inisialiasiUser();
-    system("cls");
+    if (!utils.inisialiasiUser())
+    {
+        std::cout << "========== Inisialisasi Pengguna ==========" << std::endl;
+        std::cout << "Buat username: ";
+        getline(std::cin, username);
+        std::cout << "Buat password: ";
+        getline(std::cin, password);
+        utils.createUser(username, password);
+    }
 }
 
-bool interfaces::loginUser() {
+bool interfaces::loginUser()
+{
     std::cout << "========== Autentikasi Pengguna ==========" << std::endl;
     std::cout << "Masukkan Username: ";
     getline(std::cin, username);
     std::cout << "Masukkan Password: ";
     getline(std::cin, password);
 
-    if(!utils.validasiAdmin(username, password)) {
+    if (!utils.validasiAdmin(username, password))
+    {
         return false;
         system("cls");
     };
@@ -20,7 +31,8 @@ bool interfaces::loginUser() {
     return true;
 }
 
-char interfaces::menu () {
+char interfaces::menu()
+{
     std::cout << "========== Library System ==========" << std::endl;
     std::cout << "1. Tambah data buku" << std::endl;
     std::cout << "2. Hapus data buku" << std::endl;
@@ -35,7 +47,8 @@ char interfaces::menu () {
     return choose;
 }
 
-void interfaces::tambahData () {
+void interfaces::tambahData()
+{
     std::cin.ignore();
     std::cout << "========== Tambah Data Buku ==========" << std::endl;
     std::cout << "Masukkan Judul Buku: ";
@@ -47,7 +60,7 @@ void interfaces::tambahData () {
     std::cout << "Masukkan Penerbit Buku: ";
     getline(std::cin, inptPenerbit);
     std::cout << "Masukkan ISBN Buku: ";
-    getline(std::cin,inptISBN);
+    getline(std::cin, inptISBN);
     std::cout << "Masukkan Jumlah Buku: ";
     getline(std::cin, inptStock);
 
@@ -58,8 +71,9 @@ void interfaces::tambahData () {
     system("cls");
 }
 
-void interfaces::hapusData () {
-    page:
+void interfaces::hapusData()
+{
+page:
     jumlahData = utils.ambilJumlahData();
     system("cls");
     std::cout << "========== Hapus Data Buku ==========" << std::endl;
@@ -68,20 +82,29 @@ void interfaces::hapusData () {
     std::cout << "Masukkan input: ";
     std::cin >> choose;
 
-    if(choose == 'n') {
-        if((indexPage + 1) * ukuranPage < jumlahData) {
+    if (choose == 'n')
+    {
+        if ((indexPage + 1) * ukuranPage < jumlahData)
+        {
             indexPage++;
-        }else {
+        }
+        else
+        {
             std::cin.ignore();
             std::cout << "Halaman terakhir ";
             std::cin.get();
         }
         system("cls");
         goto page;
-    }else if (choose == 'p') {
-        if(indexPage > 0) {
+    }
+    else if (choose == 'p')
+    {
+        if (indexPage > 0)
+        {
             indexPage--;
-        }else {
+        }
+        else
+        {
             std::cin.ignore();
             std::cout << "Halaman pertama ";
             std::cin.get();
@@ -101,8 +124,10 @@ void interfaces::hapusData () {
     system("cls");
 }
 
-void interfaces::editData () {
-    do{
+void interfaces::editData()
+{
+    do
+    {
         jumlahData = utils.ambilJumlahData();
         system("cls");
         std::cout << "========== Edit Data Buku ==========" << std::endl;
@@ -111,30 +136,40 @@ void interfaces::editData () {
         std::cout << "Masukkan input: ";
         std::cin >> choose;
 
-        if(choose == 'n') {
-            if((indexPage + 1) * ukuranPage < jumlahData) {
+        if (choose == 'n')
+        {
+            if ((indexPage + 1) * ukuranPage < jumlahData)
+            {
                 indexPage++;
-            }else {
+            }
+            else
+            {
                 std::cin.ignore();
                 std::cout << "Halaman terakhir ";
                 std::cin.get();
             }
             system("cls");
-        }else if(choose == 'p') {
-            if(indexPage > 0) {
+        }
+        else if (choose == 'p')
+        {
+            if (indexPage > 0)
+            {
                 indexPage--;
-            }else {
+            }
+            else
+            {
                 std::cin.ignore();
                 std::cout << "Halaman pertama ";
                 std::cin.get();
             }
             system("cls");
         }
-    }while(choose == 'n' || choose == 'p');
+    } while (choose == 'n' || choose == 'p');
     std::cin.ignore();
     std::cout << "Masukkan Judul/ISBN buku: ";
     getline(std::cin, inptJudul);
-    if(!utils.editDataBuku(inptJudul)) {
+    if (!utils.editDataBuku(inptJudul))
+    {
         std::cout << "Buku tidak ditemukan!" << std::endl;
     }
     std::cout << "Tekan enter untuk melanjutkan! ";
@@ -142,7 +177,8 @@ void interfaces::editData () {
     system("cls");
 }
 
-void interfaces::cariData () {
+void interfaces::cariData()
+{
     system("cls");
     std::cout << "========== Cari Data Buku ==========" << std::endl;
     std::cin.ignore();
@@ -154,8 +190,10 @@ void interfaces::cariData () {
     system("cls");
 }
 
-void interfaces::tampilkanData () {
-    do{
+void interfaces::tampilkanData()
+{
+    do
+    {
         jumlahData = utils.ambilJumlahData();
         system("cls");
         std::cout << "========== Tampilkan Data Buku ==========" << std::endl;
@@ -164,43 +202,54 @@ void interfaces::tampilkanData () {
         std::cout << "Masukkan input: ";
         std::cin >> choose;
 
-        if(choose == 'n') {
-            if((indexPage + 1) * ukuranPage < jumlahData) {
+        if (choose == 'n')
+        {
+            if ((indexPage + 1) * ukuranPage < jumlahData)
+            {
                 indexPage++;
-            }else {
+            }
+            else
+            {
                 std::cin.ignore();
                 std::cout << "halaman terakhir ";
                 std::cin.get();
             }
             system("cls");
-        }else if(choose == 'p') {
-            if(indexPage > 0) {
+        }
+        else if (choose == 'p')
+        {
+            if (indexPage > 0)
+            {
                 indexPage--;
-            }else {
+            }
+            else
+            {
                 std::cin.ignore();
                 std::cout << "halaman pertama ";
                 std::cin.get();
             }
             system("cls");
         }
-    }while (choose == 'n' || choose == 'p');
-    
+    } while (choose == 'n' || choose == 'p');
+
     std::cin.ignore();
     std::cout << "Tekan enter untuk melanjutkan!";
     std::cin.get();
     system("cls");
 }
 
-void interfaces::exportData () {
+void interfaces::exportData()
+{
     utils.exportDataBuku();
-        std::cout << "Data telah berhasil di export" << std::endl;
-        std::cin.ignore();
-        std::cout << "Tekan enter untuk melanjutkan! ";
-        std::cin.get();
-        system("cls");
+    std::cout << "Data telah berhasil di export" << std::endl;
+    std::cin.ignore();
+    std::cout << "Tekan enter untuk melanjutkan! ";
+    std::cin.get();
+    system("cls");
 }
 
-void interfaces::buatDatabaseSql () {
+void interfaces::buatDatabaseSql()
+{
     utils.exportDataBukuSql();
     std::cout << "Database telah berhasil di buat" << std::endl;
     std::cin.ignore();
@@ -208,6 +257,7 @@ void interfaces::buatDatabaseSql () {
     std::cin.get();
 }
 
-void interfaces::saveData () {
+void interfaces::saveData()
+{
     utils.simpanDataBuku();
 };

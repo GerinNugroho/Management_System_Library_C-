@@ -12,8 +12,10 @@ private:
     std::string username, password;
     char choose;
     int ukuranPage = 5, indexPage = 0, jumlahData;
+
 public:
-    interfaces () {
+    interfaces()
+    {
         utils.ambilDataBuku();
     };
     void initUser();
