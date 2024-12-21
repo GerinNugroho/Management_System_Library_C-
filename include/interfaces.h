@@ -221,9 +221,20 @@ public:
     {
         system("cls");
         std::cout << "========== Cari Data Buku ==========" << std::endl;
+        utils.simpanDataBuku();
         utils.sortingDataBuku();
         std::cout << "List Data Hasil Sorting" << std::endl;
         utils.tampilkanSemuaBuku(ukuranPage, indexPage);
+        std::cout << "Apakah anda yakin dengan list ini(y/n): ";
+        std::cin >> choose;
+
+        if(choose == 'y') {
+            std::cout << "Sorting disimpan" << std::endl;
+        }else if(choose == 'n') {
+            std::cout << "Sorting dibatalkan" << std::endl;
+            utils.clearData();
+            utils.ambilDataBuku();
+        }
     }
     void tampilkanData()
     {

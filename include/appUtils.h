@@ -39,6 +39,7 @@ public:
 
     // fitur sampingan
     int ambilJumlahData();
+    void clearData();
     bool inisialiasiUser();
     void createUser(std::string username, std::string password);
     bool validasiAdmin(std::string username, std::string password);

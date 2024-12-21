@@ -215,11 +215,13 @@ void app::ambilDataBuku()
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 judul = data;
+                judul[0] = toupper(judul[0]);
             }
             else if (index == 1)
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 penulis = data;
+                penulis[0] = toupper(penulis[0]);
             }
             else if (index == 2)
             {
@@ -229,6 +231,7 @@ void app::ambilDataBuku()
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 penerbit = data;
+                penerbit[0] = toupper(penerbit[0]);
             }
             else if (index == 4)
             {
@@ -310,4 +313,7 @@ bool app::validasiAdmin(std::string inptusername, std::string inptpassword)
 int app::ambilJumlahData()
 {
     return Data.size();
+}
+void app::clearData() {
+    return Data.clear();
 }

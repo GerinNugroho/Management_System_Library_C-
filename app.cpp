@@ -36,6 +36,7 @@ menu:
         cout << "Tekan enter untuk melanjutkan";
         cin.get();
         system("cls");
+        goto menu;
         break;
     case '5':
         interface.cariData();
