@@ -20,21 +20,26 @@ struct stuctureData
 class app
 {
 private:
-    std::vector<stuctureData> database;
+    std::vector<stuctureData> Data;
 
 public:
+    // fitur utama
     void tampilkanSemuaBuku(int ukuran, int index);
-    int ambilJumlahData();
-    void cariBuku(std::string Penulis);
-    void tambahBuku(std::string judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int stock);
-    void hapusBuku(std::string Judul);
+    bool hapusBuku(std::string Judul);
+    bool cariBuku(std::string input);
+    bool editDataBuku(std::string input);
+    bool tambahBuku(std::string judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int stock);
     void exportDataBuku();
     void exportDataBukuSql();
+    void sortingDataBuku();
+
+    // storage system
     void simpanDataBuku();
     void ambilDataBuku();
+
+    // fitur sampingan
+    int ambilJumlahData();
     bool inisialiasiUser();
     void createUser(std::string username, std::string password);
-    bool editDataBuku(std::string input);
     bool validasiAdmin(std::string username, std::string password);
-    void test();
 };

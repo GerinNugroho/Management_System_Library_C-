@@ -4,32 +4,33 @@ using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
+// fitur utama
 void app::tampilkanSemuaBuku(int ukuran, int index)
 {
     int startIndex = index * ukuran;
     int endIndex = startIndex + ukuran;
-    if (!database.size())
+    if (!Data.size())
     {
         std::cout << "Tambahkan Data Terlebih dahulu!" << std::endl;
         return;
     };
 
-    if (startIndex >= database.size())
+    if (startIndex >= Data.size())
     {
         std::cout << "Halaman tidak valid" << std::endl;
         return;
     }
 
-    for (int i = startIndex; i < endIndex && i < database.size(); i++)
+    for (int i = startIndex; i < endIndex && i < Data.size(); i++)
     {
-        std::cout << "Buku " << i + 1 << "\nJudul: " << database[i].judul << "\nPenulis: " << database[i].penulis << "\nTahun Terbit: " << database[i].tahunTerbit << "\nPenerbit: " << database[i].penerbit << "\nISBN: " << database[i].isbn << "\nStock: " << database[i].stock << "\n" << std::endl;
+        std::cout << "Buku " << i + 1 << "\nJudul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << "\n"
+                  << std::endl;
     }
 };
-
-void app::cariBuku(std::string input)
+bool app::cariBuku(std::string input)
 {
     bool find = false;
-    for (auto it : database)
+    for (auto it : Data)
     {
         if (it.penulis == input || it.judul == input || it.isbn == input)
         {
@@ -37,37 +38,36 @@ void app::cariBuku(std::string input)
             find = true;
         }
     }
-    if (!find)
+    return find;
+}
+bool app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int Stock = 0)
+{
+    int beforeAdd = Data.size();
+    Data.push_back({Judul, Penulis, TahunTerbit, Penerbit, ISBN, Stock});
+
+    if (Data.size() == beforeAdd)
     {
-        std::cout << "Buku tidak ditemukan!" << std::endl;
+        return false;
     }
+    return true;
 }
-
-void app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int Stock = 0)
+bool app::hapusBuku(std::string Judul)
 {
-    database.push_back({Judul, Penulis, TahunTerbit, Penerbit, ISBN, Stock});
-    std::cout << "Buku berhasil di tambahkan!" << std::endl;
-}
-
-void app::hapusBuku(std::string Judul)
-{
-    int sizeData = database.size();
+    int sizeData = Data.size();
 
     for (int i = 0; i < sizeData; i++)
     {
-        if (database[i].judul == Judul)
+        if (Data[i].judul == Judul)
         {
-            database.erase(database.begin() + i);
+            Data.erase(Data.begin() + i);
         };
     }
-    if (database.size() == sizeData)
+    if (Data.size() == sizeData)
     {
-        std::cout << "Buku tidak ada di list!" << std::endl;
-        return;
+        return false;
     }
-    std::cout << "Buku berhasil di hapus" << std::endl;
+    return true;
 }
-
 void app::exportDataBuku()
 {
 
@@ -91,7 +91,7 @@ void app::exportDataBuku()
     data << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Stock</Data></Cell>";
     data << " </Row>";
 
-    for (auto it : database)
+    for (auto it : Data)
     {
         data << "<Row>";
         data << "<Cell ss:Index=\"2\" ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << it.judul << "</Data></Cell>";
@@ -107,7 +107,6 @@ void app::exportDataBuku()
 
     data.close();
 };
-
 void app::exportDataBukuSql()
 {
 
@@ -119,9 +118,9 @@ void app::exportDataBukuSql()
 
     sql << "CREATE TABLE `buku`(`ID_BUKU` varchar(10) NOT NULL,`BUKU` varchar(150) DEFAULT NULL,`PENULIS` varchar(150) DEFAULT NULL,`TAHUN_TERBIT` char(4) DEFAULT NULL,`PENERBIT` varchar(150) DEFAULT NULL,`ISBN` char(50) DEFAULT NULL,`STOCK` char(4) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `buku`(`ID_BUKU`, `BUKU`, `PENULIS`, `TAHUN_TERBIT`, `PENERBIT`, `ISBN`, `STOCK`) VALUES";
 
-    for (auto it : database)
+    for (auto it : Data)
     {
-        if (list == database.size())
+        if (list == Data.size())
         {
             sql << "(\'BK" << list << "\',\'" << it.judul << "\',\'" << it.penulis << "\',\'" << it.tahunTerbit << "\',\'" << it.penerbit << "\',\'" << it.isbn << "\',\'" << it.stock << "\');";
         }
@@ -135,12 +134,62 @@ void app::exportDataBukuSql()
     sql << "ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`); COMMIT;";
     sql.close();
 }
+bool app::editDataBuku(std::string input)
+{
+    bool edited = false;
+    for (int i = 0; i < Data.size(); i++)
+    {
+        if (Data[i].judul == input || Data[i].isbn == input)
+        {
+            std::cout << "\nData yang akan diedit" << std::endl;
+            std::cout << "Judul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << std::endl;
 
+            std::string bfrJudul, bfrPenulis, bfrTahunTerbit, bfrPenerbit, bfrISBN, bfrStock;
+            std::cout << "\nMasukkan data baru" << std::endl;
+            std::cout << "NOTE: Silahkan diisi \"-\" jika tidak ingin mengubah datanya!" << std::endl;
+            std::cout << "Judul: ";
+            getline(std::cin, bfrJudul);
+            std::cout << "Penulis: ";
+            getline(std::cin, bfrPenulis);
+            std::cout << "Tahun Terbit: ";
+            getline(std::cin, bfrTahunTerbit);
+            std::cout << "Penerbit: ";
+            getline(std::cin, bfrPenerbit);
+            std::cout << "ISBN: ";
+            getline(std::cin, bfrISBN);
+            std::cout << "Stock: ";
+            getline(std::cin, bfrStock);
+
+            bfrStock = bfrStock == "-" ? std::to_string(Data[i].stock) : bfrStock;
+            Data[i] = {
+                bfrJudul == "-" ? Data[i].judul : bfrJudul,
+                bfrPenulis == "-" ? Data[i].penulis : bfrPenulis,
+                bfrTahunTerbit == "-" ? Data[i].tahunTerbit : bfrTahunTerbit,
+                bfrPenerbit == "-" ? Data[i].penerbit : bfrPenerbit,
+                bfrISBN == "-" ? Data[i].isbn : bfrISBN,
+                std::stoi(bfrStock)};
+            std::cout << "Data berhasil di edit" << std::endl;
+            return edited = true;
+        }
+    }
+    return edited;
+}
+void app::sortingDataBuku()
+{
+    auto compare = [&](stuctureData &a, stuctureData &b)
+    {
+        return a.judul < b.judul;
+    };
+
+    std::sort(Data.begin(), Data.end(), compare);
+};
+
+// storage system
 void app::simpanDataBuku()
 {
     ofstream datas("./datas/datas.txt");
     std::string bufferData;
-    for (auto it : database)
+    for (auto it : Data)
     {
         std::replace(it.judul.begin(), it.judul.end(), ' ', '_');
         std::replace(it.penulis.begin(), it.penulis.end(), ' ', '_');
@@ -151,7 +200,6 @@ void app::simpanDataBuku()
     datas << bufferData;
     datas.close();
 }
-
 void app::ambilDataBuku()
 {
     fstream datas("./datas/datas.txt");
@@ -192,12 +240,13 @@ void app::ambilDataBuku()
             }
             index++;
         }
-        database.push_back({judul, penulis, tahunterbit, penerbit, isbn, stock});
+        Data.push_back({judul, penulis, tahunterbit, penerbit, isbn, stock});
     };
 
     datas.close();
 };
 
+// fitur sampingan
 bool app::inisialiasiUser()
 {
     ifstream pengguna("./datas/pengguna.txt");
@@ -214,7 +263,6 @@ bool app::inisialiasiUser()
     return false;
     pengguna.close();
 }
-
 void app::createUser(std::string username, std::string password)
 {
     ofstream writePengguna("./datas/pengguna.txt");
@@ -225,48 +273,6 @@ void app::createUser(std::string username, std::string password)
 
     writePengguna.close();
 }
-
-bool app::editDataBuku(std::string input)
-{
-    bool edited = false;
-    for (int i = 0; i < database.size(); i++)
-    {
-        if (database[i].judul == input || database[i].isbn == input)
-        {
-            std::cout << "\nData yang akan diedit" << std::endl;
-            std::cout << "Judul: " << database[i].judul << "\nPenulis: " << database[i].penulis << "\nTahun Terbit: " << database[i].tahunTerbit << "\nPenerbit: " << database[i].penerbit << "\nISBN: " << database[i].isbn << "\nStock: " << database[i].stock << std::endl;
-
-            std::string bfrJudul, bfrPenulis, bfrTahunTerbit, bfrPenerbit, bfrISBN, bfrStock;
-            std::cout << "\nMasukkan data baru" << std::endl;
-            std::cout << "NOTE: Silahkan diisi \"-\" jika tidak ingin mengubah datanya!" << std::endl;
-            std::cout << "Judul: ";
-            getline(std::cin, bfrJudul);
-            std::cout << "Penulis: ";
-            getline(std::cin, bfrPenulis);
-            std::cout << "Tahun Terbit: ";
-            getline(std::cin, bfrTahunTerbit);
-            std::cout << "Penerbit: ";
-            getline(std::cin, bfrPenerbit);
-            std::cout << "ISBN: ";
-            getline(std::cin, bfrISBN);
-            std::cout << "Stock: ";
-            getline(std::cin, bfrStock);
-
-            bfrStock = bfrStock == "-" ? std::to_string(database[i].stock) : bfrStock;
-            database[i] = {
-                bfrJudul == "-" ? database[i].judul : bfrJudul,
-                bfrPenulis == "-" ? database[i].penulis : bfrPenulis,
-                bfrTahunTerbit == "-" ? database[i].tahunTerbit : bfrTahunTerbit,
-                bfrPenerbit == "-" ? database[i].penerbit : bfrPenerbit,
-                bfrISBN == "-" ? database[i].isbn : bfrISBN,
-                std::stoi(bfrStock)};
-            std::cout << "Data berhasil di edit" << std::endl;
-            return edited = true;
-        }
-    }
-    return edited;
-}
-
 bool app::validasiAdmin(std::string inptusername, std::string inptpassword)
 {
     fstream pengguna("./datas/pengguna.txt");
@@ -301,8 +307,7 @@ bool app::validasiAdmin(std::string inptusername, std::string inptpassword)
     pengguna.close();
     return validate;
 }
-
 int app::ambilJumlahData()
 {
-    return database.size();
+    return Data.size();
 }

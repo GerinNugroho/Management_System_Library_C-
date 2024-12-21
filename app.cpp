@@ -31,22 +31,29 @@ menu:
         goto menu;
         break;
     case '4':
+        interface.sortDataBuku();
+        cin.ignore();
+        cout << "Tekan enter untuk melanjutkan";
+        cin.get();
+        system("cls");
+        break;
+    case '5':
         interface.cariData();
         goto menu;
         break;
-    case '5':
+    case '6':
         interface.tampilkanData();
         goto menu;
         break;
-    case '6':
+    case '7':
         interface.exportData();
         goto menu;
         break;
-    case '7':
+    case '8':
         interface.buatDatabaseSql();
         goto menu;
         break;
-    case '8':
+    case '9':
         interface.saveData();
         break;
     default:

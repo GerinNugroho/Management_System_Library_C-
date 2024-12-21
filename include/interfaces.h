@@ -18,6 +18,7 @@ public:
     {
         utils.ambilDataBuku();
     };
+
     void initUser()
     {
         utils.inisialiasiUser();
@@ -31,7 +32,6 @@ public:
             utils.createUser(username, password);
         }
     }
-
     bool loginUser()
     {
         std::cout << "========== Autentikasi Pengguna ==========" << std::endl;
@@ -48,28 +48,28 @@ public:
         system("cls");
         return true;
     }
-
     char menu()
     {
         indexPage = 0;
+        jumlahData = utils.ambilJumlahData();
         std::cout << "========== Library System ==========" << std::endl;
         std::cout << "1. Tambah data buku" << std::endl;
         std::cout << "2. Hapus data buku" << std::endl;
         std::cout << "3. Edit data buku" << std::endl;
-        std::cout << "4. Cari data buku" << std::endl;
-        std::cout << "5. Tampilkan data buku" << std::endl;
-        std::cout << "6. Export data buku" << std::endl;
-        std::cout << "7. Buat database sql" << std::endl;
-        std::cout << "8. keluar program" << std::endl;
+        std::cout << "4. Sort data buku" << std::endl;
+        std::cout << "5. Cari data buku" << std::endl;
+        std::cout << "6. Tampilkan data buku" << std::endl;
+        std::cout << "7. Export data buku" << std::endl;
+        std::cout << "8. Buat database sql" << std::endl;
+        std::cout << "9. keluar program" << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
         return choose;
     }
-
     void tambahData()
     {
-        std::cin.ignore();
         std::cout << "========== Tambah Data Buku ==========" << std::endl;
+        std::cin.ignore();
         std::cout << "Masukkan Judul Buku: ";
         getline(std::cin, inptJudul);
         std::cout << "Masukkan Penulis Buku: ";
@@ -83,17 +83,22 @@ public:
         std::cout << "Masukkan Jumlah Buku: ";
         getline(std::cin, inptStock);
 
-        utils.tambahBuku(inptJudul, inptPenulis, inptTahunTerbit, inptPenerbit, inptISBN, stoi(inptStock));
+        if (utils.tambahBuku(inptJudul, inptPenulis, inptTahunTerbit, inptPenerbit, inptISBN, stoi(inptStock)))
+        {
+            std::cout << "Data berhasil ditambahkan" << std::endl;
+        }
+        else
+        {
+            std::cout << "Data gagal ditambahkan" << std::endl;
+        }
 
         std::cout << "Tekan enter untuk melanjutkan!";
         std::cin.get();
         system("cls");
     }
-
     void hapusData()
     {
     page:
-        jumlahData = utils.ambilJumlahData();
         system("cls");
         std::cout << "========== Hapus Data Buku ==========" << std::endl;
         utils.tampilkanSemuaBuku(ukuranPage, indexPage);
@@ -131,23 +136,26 @@ public:
             system("cls");
             goto page;
         }
-
-        std::cin.ignore();
         std::cout << "Masukkan Judul Buku: ";
+        std::cin.ignore();
         getline(std::cin, inptJudul);
 
-        utils.hapusBuku(inptJudul);
-
+        if (utils.hapusBuku(inptJudul))
+        {
+            std::cout << "Data berhasil dihapus" << std::endl;
+        }
+        else
+        {
+            std::cout << "Data gagal di hapus" << std::endl;
+        }
         std::cout << "Tekan enter untuk melanjutkan! ";
         std::cin.get();
         system("cls");
     }
-
     void editData()
     {
         do
         {
-            jumlahData = utils.ambilJumlahData();
             system("cls");
             std::cout << "========== Edit Data Buku ==========" << std::endl;
             utils.tampilkanSemuaBuku(ukuranPage, indexPage);
@@ -184,8 +192,8 @@ public:
                 system("cls");
             }
         } while (choose == 'n' || choose == 'p');
-        std::cin.ignore();
         std::cout << "Masukkan Judul/ISBN buku: ";
+        std::cin.ignore();
         getline(std::cin, inptJudul);
         if (!utils.editDataBuku(inptJudul))
         {
@@ -195,25 +203,32 @@ public:
         std::cin.get();
         system("cls");
     }
-
     void cariData()
     {
         system("cls");
         std::cout << "========== Cari Data Buku ==========" << std::endl;
-        std::cin.ignore();
         std::cout << "Masukkan judul/penulis/ISBN: ";
+        std::cin.ignore();
         getline(std::cin, inptPenulis);
-        utils.cariBuku(inptPenulis);
+        if(!utils.cariBuku(inptPenulis)) {
+            std::cout << "Buku tidak ditemukan!" << std::endl;
+        };
         std::cout << "Tekan enter untuk melanjutkan!";
         std::cin.get();
         system("cls");
     }
-
+    void sortDataBuku()
+    {
+        system("cls");
+        std::cout << "========== Cari Data Buku ==========" << std::endl;
+        utils.sortingDataBuku();
+        std::cout << "List Data Hasil Sorting" << std::endl;
+        utils.tampilkanSemuaBuku(ukuranPage, indexPage);
+    }
     void tampilkanData()
     {
         do
         {
-            jumlahData = utils.ambilJumlahData();
             system("cls");
             std::cout << "========== Tampilkan Data Buku ==========" << std::endl;
             utils.tampilkanSemuaBuku(ukuranPage, indexPage);
@@ -256,7 +271,6 @@ public:
         std::cin.get();
         system("cls");
     }
-
     void exportData()
     {
         utils.exportDataBuku();
@@ -266,7 +280,6 @@ public:
         std::cin.get();
         system("cls");
     }
-
     void buatDatabaseSql()
     {
         utils.exportDataBukuSql();
@@ -275,7 +288,6 @@ public:
         std::cout << "Tekan enter untuk melanjutkan! ";
         std::cin.get();
     }
-
     void saveData()
     {
         utils.simpanDataBuku();
