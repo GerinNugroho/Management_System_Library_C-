@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <cstdio>
 
-struct stuctureData
+struct structureData
 {
     std::string judul;
     std::string penulis;
@@ -20,7 +20,7 @@ struct stuctureData
 class app
 {
 private:
-    std::vector<stuctureData> Data;
+    std::vector<structureData> Data;
 
 public:
     // fitur utama
@@ -31,7 +31,7 @@ public:
     bool tambahBuku(std::string judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int stock);
     void exportDataBuku();
     void exportDataBukuSql();
-    void sortingDataBuku();
+    void sortingDataBuku(char input);
 
     // storage system
     void simpanDataBuku();
@@ -39,8 +39,8 @@ public:
 
     // fitur sampingan
     int ambilJumlahData();
-    void clearData();
     bool inisialiasiUser();
     void createUser(std::string username, std::string password);
     bool validasiAdmin(std::string username, std::string password);
+    std::string capitalize(std::string input);
 };

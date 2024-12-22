@@ -52,7 +52,7 @@ public:
     {
         indexPage = 0;
         jumlahData = utils.ambilJumlahData();
-        std::cout << "========== Library System ==========" << std::endl;
+        std::cout << "========== Library Management System ==========" << std::endl;
         std::cout << "1. Tambah data buku" << std::endl;
         std::cout << "2. Hapus data buku" << std::endl;
         std::cout << "3. Edit data buku" << std::endl;
@@ -220,10 +220,15 @@ public:
     void sortDataBuku()
     {
         system("cls");
-        std::cout << "========== Cari Data Buku ==========" << std::endl;
+        std::cout << "========== Sorting Data Buku ==========" << std::endl;
         utils.simpanDataBuku();
-        utils.sortingDataBuku();
-        std::cout << "List Data Hasil Sorting" << std::endl;
+        std::cout << "Silahkan pilih metode sortir" << std::endl;
+        std::cout << "1. Alfabet" << std::endl;
+        std::cout << "2. Stock" << std::endl;
+        std::cout << "Pilih dari menu: ";
+        std::cin >> choose;
+        utils.sortingDataBuku(choose);
+        std::cout << "\nList Data Hasil Sorting\n" << std::endl;
         utils.tampilkanSemuaBuku(ukuranPage, indexPage);
         std::cout << "Apakah anda yakin dengan list ini(y/n): ";
         std::cin >> choose;
@@ -232,7 +237,6 @@ public:
             std::cout << "Sorting disimpan" << std::endl;
         }else if(choose == 'n') {
             std::cout << "Sorting dibatalkan" << std::endl;
-            utils.clearData();
             utils.ambilDataBuku();
         }
     }
@@ -303,4 +307,12 @@ public:
     {
         utils.simpanDataBuku();
     };
+    void testing ()
+    {
+        std::cin.ignore();
+        std::cout << "masukkan kata: ";
+        std::cin >> inptJudul;
+        utils.capitalize(inptJudul);
+        std::cout << inptJudul << std::endl;
+    }
 };

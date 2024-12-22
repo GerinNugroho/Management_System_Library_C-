@@ -43,7 +43,9 @@ bool app::cariBuku(std::string input)
 bool app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int Stock = 0)
 {
     int beforeAdd = Data.size();
-    Data.push_back({Judul, Penulis, TahunTerbit, Penerbit, ISBN, Stock});
+    std::string frmtJudul = capitalize(Judul), frmtPenulis = capitalize(Penulis), frmtPenerbit = capitalize(Penerbit);
+
+    Data.push_back({frmtJudul, frmtPenulis, TahunTerbit, frmtPenerbit, ISBN, Stock});
 
     if (Data.size() == beforeAdd)
     {
@@ -54,10 +56,10 @@ bool app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTe
 bool app::hapusBuku(std::string Judul)
 {
     int sizeData = Data.size();
-
+    std::string frmtJudul = capitalize(Judul);
     for (int i = 0; i < sizeData; i++)
     {
-        if (Data[i].judul == Judul)
+        if (Data[i].judul == frmtJudul)
         {
             Data.erase(Data.begin() + i);
         };
@@ -139,7 +141,7 @@ bool app::editDataBuku(std::string input)
     bool edited = false;
     for (int i = 0; i < Data.size(); i++)
     {
-        if (Data[i].judul == input || Data[i].isbn == input)
+        if (Data[i].judul == capitalize(input) || Data[i].isbn == input)
         {
             std::cout << "\nData yang akan diedit" << std::endl;
             std::cout << "Judul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << std::endl;
@@ -162,10 +164,10 @@ bool app::editDataBuku(std::string input)
 
             bfrStock = bfrStock == "-" ? std::to_string(Data[i].stock) : bfrStock;
             Data[i] = {
-                bfrJudul == "-" ? Data[i].judul : bfrJudul,
-                bfrPenulis == "-" ? Data[i].penulis : bfrPenulis,
+                bfrJudul == "-" ? Data[i].judul : capitalize(bfrJudul),
+                bfrPenulis == "-" ? Data[i].penulis : capitalize(bfrPenulis),
                 bfrTahunTerbit == "-" ? Data[i].tahunTerbit : bfrTahunTerbit,
-                bfrPenerbit == "-" ? Data[i].penerbit : bfrPenerbit,
+                bfrPenerbit == "-" ? Data[i].penerbit : capitalize(bfrPenerbit),
                 bfrISBN == "-" ? Data[i].isbn : bfrISBN,
                 std::stoi(bfrStock)};
             std::cout << "Data berhasil di edit" << std::endl;
@@ -174,14 +176,23 @@ bool app::editDataBuku(std::string input)
     }
     return edited;
 }
-void app::sortingDataBuku()
+void app::sortingDataBuku(char input)
 {
-    auto compare = [&](stuctureData &a, stuctureData &b)
+    auto compareAlfabet = [&](structureData &b, structureData &e)
     {
-        return a.judul < b.judul;
+        return b.judul < e.judul;
     };
 
-    std::sort(Data.begin(), Data.end(), compare);
+    auto compareStock = [&](structureData &b, structureData &e)
+    {
+        return b.stock < e.stock;
+    };
+
+    if(input == '1') {
+        std::sort(Data.begin(), Data.end(), compareAlfabet);
+    }else if(input == '2') {
+        std::sort(Data.begin(), Data.end(), compareStock);
+    }
 };
 
 // storage system
@@ -203,6 +214,7 @@ void app::simpanDataBuku()
 void app::ambilDataBuku()
 {
     fstream datas("./datas/datas.txt");
+    Data.clear();
     std::string line;
     while (getline(datas, line))
     {
@@ -215,13 +227,11 @@ void app::ambilDataBuku()
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 judul = data;
-                judul[0] = toupper(judul[0]);
             }
             else if (index == 1)
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 penulis = data;
-                penulis[0] = toupper(penulis[0]);
             }
             else if (index == 2)
             {
@@ -231,7 +241,6 @@ void app::ambilDataBuku()
             {
                 std::replace(data.begin(), data.end(), '_', ' ');
                 penerbit = data;
-                penerbit[0] = toupper(penerbit[0]);
             }
             else if (index == 4)
             {
@@ -243,7 +252,7 @@ void app::ambilDataBuku()
             }
             index++;
         }
-        Data.push_back({judul, penulis, tahunterbit, penerbit, isbn, stock});
+        tambahBuku(judul, penulis, tahunterbit, penerbit, isbn, stock);
     };
 
     datas.close();
@@ -314,6 +323,13 @@ int app::ambilJumlahData()
 {
     return Data.size();
 }
-void app::clearData() {
-    return Data.clear();
+std::string app::capitalize (std::string input) 
+{
+    int inputSize = input.size();
+    for(int i = 0; i < inputSize; i++) {
+        if(i == 0 || input[i - 1] == ' ') {
+            input[i] = toupper(input[i]);
+        }
+    }
+    return input;
 }
