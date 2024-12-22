@@ -239,6 +239,10 @@ public:
             std::cout << "Sorting dibatalkan" << std::endl;
             utils.ambilDataBuku();
         }
+        std::cin.ignore();
+        std::cout << "Tekan enter untuk melanjutkan";
+        std::cin.get();
+        system("cls");
     }
     void tampilkanData()
     {
