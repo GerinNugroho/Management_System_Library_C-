@@ -32,10 +32,6 @@ menu:
         break;
     case '4':
         interface.sortDataBuku();
-        cin.ignore();
-        cout << "Tekan enter untuk melanjutkan";
-        cin.get();
-        system("cls");
         goto menu;
         break;
     case '5':
@@ -65,6 +61,8 @@ menu:
         goto menu;
         break;
     };
+    cin.ignore();
     cout << "Terima kasih sudah menggunakan program kami!";
+    cin.get();
     return 0;
 }
