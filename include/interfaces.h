@@ -302,17 +302,10 @@ public:
         std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan! ";
         std::cin.get();
+        system("cls");
     }
     void saveData()
     {
         utils.simpanDataBuku();
     };
-    void testing ()
-    {
-        std::cin.ignore();
-        std::cout << "masukkan kata: ";
-        std::cin >> inptJudul;
-        utils.capitalize(inptJudul);
-        std::cout << inptJudul << std::endl;
-    }
 };

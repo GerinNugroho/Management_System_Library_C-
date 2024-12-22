@@ -58,7 +58,6 @@ menu:
         interface.saveData();
         break;
     default:
-        interface.testing();
         cin.ignore();
         cout << "Masukkan angka yang benar!";
         cin.get();
