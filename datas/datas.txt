@@ -1,4 +1,5 @@
-Aku_Anak_Indonesia Gerin 2005 Gerin 24804028 20
+Aku_Anak_Mama Gerin 2005 Gerin 1234 30
+Cara_Makan Gerin 2004 G_Corp 9384938 90
 Cara_Memasak Dimas-ukin 2008 Kor_Corp 20340 10
 Gerakan_30_September Gerin_Nugroho 2006 Indonesia_Merdeka 2494 40
 Tragedi_711 Prof_G 2004 G_Corp 3434 30

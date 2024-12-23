@@ -21,7 +21,6 @@ public:
 
     void initUser()
     {
-        utils.inisialiasiUser();
         if (!utils.inisialiasiUser())
         {
             std::cout << "========== Inisialisasi Pengguna ==========" << std::endl;
