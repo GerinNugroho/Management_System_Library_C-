@@ -17,30 +17,48 @@ struct structureData
     int stock;
 };
 
+struct structureMember
+{
+    int id;
+    std::string fullname;
+    std::string username;
+    std::string password;
+    std::string status;
+};
+
 class app
 {
 private:
     std::vector<structureData> Data;
+    std::vector<structureMember> DataMember;
 
 public:
-    // fitur utama
-    void tampilkanSemuaBuku(int ukuran, int index);
-    bool hapusBuku(std::string Judul);
-    bool cariBuku(std::string input);
+    // fitur untuk admin
+    void tampilkanDataBuku(int ukuranPage, int indexPage);
+    bool hapusDataBuku(std::string judul);
+    bool cariDataBuku(std::string input);
     bool editDataBuku(std::string input);
-    bool tambahBuku(std::string judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int stock);
+    bool tambahDataBuku(std::string judul, std::string penulis, std::string tahunTerbit, std::string penerbit, std::string ISBN, int stock);
     void exportDataBuku();
-    void exportDataBukuSql();
-    void sortingDataBuku(char input);
+    void buatDatabase();
+    void sortirDataBuku(char input);
+    bool inisialiasiAdmin();
+    void buatAdmin(std::string username, std::string password);
+    bool authentikasiAdmin(std::string username, std::string password);
+    
+    // fitur untuk member
+    void simpanDataMember (std::string fullname, std::string username, std::string password);
+    bool masukMember(std::string username, std::string password);
+    void tampilkanBukuMember(int ukuranPage, int indexPage);
+    void cariBukuMember(std::string input);
+    void pinjamBukuMember(std::string judul);
 
     // storage system
     void simpanDataBuku();
     void ambilDataBuku();
+    void ambilDataMember ();
 
-    // fitur sampingan
+    // fungsi pendukung
     int ambilJumlahData();
-    bool inisialiasiUser();
-    void createUser(std::string username, std::string password);
-    bool validasiAdmin(std::string username, std::string password);
     std::string capitalize(std::string input);
 };

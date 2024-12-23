@@ -4,11 +4,11 @@ using std::fstream;
 using std::ifstream;
 using std::ofstream;
 
-// fitur utama
-void app::tampilkanSemuaBuku(int ukuran, int index)
+// fitur untuk admin
+void app::tampilkanDataBuku(int ukuranPage, int indexPage)
 {
-    int startIndex = index * ukuran;
-    int endIndex = startIndex + ukuran;
+    int startIndex = indexPage * ukuranPage;
+    int endIndex = startIndex + ukuranPage;
     if (!Data.size())
     {
         std::cout << "Tambahkan Data Terlebih dahulu!" << std::endl;
@@ -27,7 +27,7 @@ void app::tampilkanSemuaBuku(int ukuran, int index)
                   << std::endl;
     }
 };
-bool app::cariBuku(std::string input)
+bool app::cariDataBuku(std::string input)
 {
     bool find = false;
     for (auto it : Data)
@@ -40,12 +40,12 @@ bool app::cariBuku(std::string input)
     }
     return find;
 }
-bool app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTerbit, std::string Penerbit, std::string ISBN, int Stock = 0)
+bool app::tambahDataBuku(std::string judul, std::string penulis, std::string tahunTerbit, std::string penerbit, std::string ISBN, int stock = 0)
 {
     int beforeAdd = Data.size();
-    std::string frmtJudul = capitalize(Judul), frmtPenulis = capitalize(Penulis), frmtPenerbit = capitalize(Penerbit);
+    std::string frmtJudul = capitalize(judul), frmtPenulis = capitalize(penulis), frmtPenerbit = capitalize(penerbit);
 
-    Data.push_back({frmtJudul, frmtPenulis, TahunTerbit, frmtPenerbit, ISBN, Stock});
+    Data.push_back({frmtJudul, frmtPenulis, tahunTerbit, frmtPenerbit, ISBN, stock});
 
     if (Data.size() == beforeAdd)
     {
@@ -53,18 +53,19 @@ bool app::tambahBuku(std::string Judul, std::string Penulis, std::string TahunTe
     }
     return true;
 }
-bool app::hapusBuku(std::string Judul)
+bool app::hapusDataBuku(std::string Judul)
 {
-    int sizeData = Data.size();
+    int beforeErase = Data.size(), index = 0;
     std::string frmtJudul = capitalize(Judul);
-    for (int i = 0; i < sizeData; i++)
+    for (auto it : Data)
     {
-        if (Data[i].judul == frmtJudul)
+        if (it.judul == frmtJudul)
         {
-            Data.erase(Data.begin() + i);
+            Data.erase(Data.begin() + index);
         };
+        index++;
     }
-    if (Data.size() == sizeData)
+    if (Data.size() == beforeErase)
     {
         return false;
     }
@@ -76,7 +77,6 @@ void app::exportDataBuku()
     std::remove("./library.xls");
 
     ofstream data("./library.xls", std::ios::app);
-    int list = 1;
 
     data << "<?xml version=\"1.0\"?><?mso-application progid=\"Excel.Sheet\"?><Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
 
@@ -109,7 +109,7 @@ void app::exportDataBuku()
 
     data.close();
 };
-void app::exportDataBukuSql()
+void app::buatDatabase()
 {
 
     std::remove("./library.sql");
@@ -139,44 +139,46 @@ void app::exportDataBukuSql()
 bool app::editDataBuku(std::string input)
 {
     bool edited = false;
-    for (int i = 0; i < Data.size(); i++)
+    int index = 0;
+    for (auto it : Data)
     {
-        if (Data[i].judul == capitalize(input) || Data[i].isbn == input)
+        if (it.judul == capitalize(input) || it.isbn == input)
         {
             std::cout << "\nData yang akan diedit" << std::endl;
-            std::cout << "Judul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << std::endl;
+            std::cout << "Judul: " << it.judul << "\nPenulis: " << it.penulis << "\nTahun Terbit: " << it.tahunTerbit << "\nPenerbit: " << it.penerbit << "\nISBN: " << it.isbn << "\nStock: " << it.stock << std::endl;
 
-            std::string bfrJudul, bfrPenulis, bfrTahunTerbit, bfrPenerbit, bfrISBN, bfrStock;
+            std::string judul, penulis, tahunTerbit, penerbit, ISBN, stock;
             std::cout << "\nMasukkan data baru" << std::endl;
             std::cout << "NOTE: Silahkan diisi \"-\" jika tidak ingin mengubah datanya!" << std::endl;
             std::cout << "Judul: ";
-            getline(std::cin, bfrJudul);
+            std::cin.ignore();
+            getline(std::cin, judul);
             std::cout << "Penulis: ";
-            getline(std::cin, bfrPenulis);
+            getline(std::cin, penulis);
             std::cout << "Tahun Terbit: ";
-            getline(std::cin, bfrTahunTerbit);
+            getline(std::cin, tahunTerbit);
             std::cout << "Penerbit: ";
-            getline(std::cin, bfrPenerbit);
+            getline(std::cin, penerbit);
             std::cout << "ISBN: ";
-            getline(std::cin, bfrISBN);
+            getline(std::cin, ISBN);
             std::cout << "Stock: ";
-            getline(std::cin, bfrStock);
+            getline(std::cin, stock);
 
-            bfrStock = bfrStock == "-" ? std::to_string(Data[i].stock) : bfrStock;
-            Data[i] = {
-                bfrJudul == "-" ? Data[i].judul : capitalize(bfrJudul),
-                bfrPenulis == "-" ? Data[i].penulis : capitalize(bfrPenulis),
-                bfrTahunTerbit == "-" ? Data[i].tahunTerbit : bfrTahunTerbit,
-                bfrPenerbit == "-" ? Data[i].penerbit : capitalize(bfrPenerbit),
-                bfrISBN == "-" ? Data[i].isbn : bfrISBN,
-                std::stoi(bfrStock)};
+            stock = stock == "-" ? std::to_string(it.stock) : stock;
+            Data[index] = {
+                judul == "-" ? it.judul : capitalize(judul),
+                penulis == "-" ? it.penulis : capitalize(penulis),
+                tahunTerbit == "-" ? it.tahunTerbit : tahunTerbit,
+                penerbit == "-" ? it.penerbit : capitalize(penerbit),
+                ISBN == "-" ? it.isbn : ISBN,
+                std::stoi(stock)};
             std::cout << "Data berhasil di edit" << std::endl;
             return edited = true;
         }
     }
     return edited;
 }
-void app::sortingDataBuku(char input)
+void app::sortirDataBuku(char input)
 {
     auto compareAlfabet = [&](structureData &b, structureData &e)
     {
@@ -188,17 +190,172 @@ void app::sortingDataBuku(char input)
         return b.stock < e.stock;
     };
 
-    if(input == '1') {
+    if (input == '1')
+    {
         std::sort(Data.begin(), Data.end(), compareAlfabet);
-    }else if(input == '2') {
+    }
+    else if (input == '2')
+    {
         std::sort(Data.begin(), Data.end(), compareStock);
     }
 };
+bool app::inisialiasiAdmin()
+{
+    ifstream adminFile("./datas/admin.txt");
+    bool status = false;
+
+    if (adminFile.is_open())
+    {
+        char buffer[1];
+        adminFile.getline(buffer, 2);
+        if (adminFile.gcount() > 0)
+        {
+            status = true;
+        }
+    }
+    adminFile.close();
+    return status;
+}
+void app::buatAdmin(std::string username, std::string password)
+{
+    ofstream adminFile("./datas/admin.txt");
+
+    std::replace(username.begin(), username.end(), ' ', '_');
+    std::replace(password.begin(), password.end(), ' ', '_');
+    adminFile << username << " " << password;
+
+    adminFile.close();
+}
+bool app::authentikasiAdmin(std::string username, std::string password)
+{
+    fstream adminFile("./datas/admin.txt");
+
+    std::string line;
+    bool validate = false;
+
+    while (getline(adminFile, line))
+    {
+        std::istringstream iss(line);
+        std::string Fusername, Fpassword, word;
+        int index = 0;
+        while (iss >> word)
+        {
+            std::replace(word.begin(), word.end(), '_', ' ');
+            if (index == 0)
+            {
+                Fusername = word;
+            }
+            else if (index == 1)
+            {
+                Fpassword = word;
+            }
+            index++;
+        }
+
+        if (Fusername == username && Fpassword == password)
+        {
+            validate = true;
+        }
+    }
+    adminFile.close();
+    return validate;
+}
+
+// fitur untuk member 
+void app::simpanDataMember(std::string fullname, std::string username, std::string password)
+{
+    std::string frmtFullname = capitalize(fullname), status = "Tidak Meminjam";
+    int id = DataMember.size() + 1;
+
+    DataMember.push_back({id, frmtFullname, username, password, status});
+
+    ofstream memberFile("./datas/member.txt", std::ios::app);
+
+    std::replace(frmtFullname.begin(), frmtFullname.end(), ' ', '_');
+    std::replace(username.begin(), username.end(), ' ', '_');
+    std::replace(status.begin(), status.end(), ' ', '_');
+    memberFile << id << " " << frmtFullname << " " << username << " " << password << " " << status << std::endl;
+
+    memberFile.close();
+};
+bool app::masukMember(std::string username, std::string password)
+{
+    for (auto it : DataMember)
+    {
+        if (it.username == username && it.password == password)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+void app::tampilkanBukuMember(int ukuranPage, int indexPage)
+{
+    int startIndex = indexPage * ukuranPage;
+    int endIndex = startIndex + ukuranPage;
+    if (!Data.size())
+    {
+        std::cout << "Tidak ada buku yang tersedia" << std::endl;
+        return;
+    };
+
+    if (startIndex >= Data.size())
+    {
+        std::cout << "Halaman tidak valid" << std::endl;
+        return;
+    }
+
+    for (int i = startIndex; i < endIndex && i < Data.size(); i++)
+    {
+        std::cout << "\nBuku " << i + 1 << "\nJudul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nPenerbit: " << Data[i].penerbit << std::endl;
+    }
+}
+void app::cariBukuMember(std::string input)
+{
+    bool find = false;
+    int index = 1;
+    for (auto it : Data)
+    {
+        if (it.judul == input || it.penulis == input)
+        {
+            std::cout << "\nBuku " << index << "\nJudul: " << it.judul
+                      << "\nPenulis: " << it.penulis << "\nPenerbit: " << it.penerbit << std::endl;
+            find = true;
+        }
+        index++;
+    }
+    if (!find)
+    {
+        std::cout << "Buku tidak ditemukan!" << std::endl;
+    }
+}
+void app::pinjamBukuMember(std::string judul)
+{
+    bool find = false;
+    int index = 0;
+    for (auto it : Data)
+    {
+        if (it.judul == judul)
+        {
+            Data[index].stock -= 1;
+            find = true;
+        }
+        index++;
+    }
+    if (!find)
+    {
+        std::cout << "Buku gagal dipinjam karna tidak ada!" << std::endl;
+        return;
+    }
+
+    std::cout << "Buku berhasil dipinjam!" << std::endl;
+    simpanDataBuku();
+}
 
 // storage system
 void app::simpanDataBuku()
 {
-    ofstream datas("./datas/datas.txt");
+    ofstream datasFile("./datas/datas.txt");
     std::string bufferData;
     for (auto it : Data)
     {
@@ -208,15 +365,15 @@ void app::simpanDataBuku()
         bufferData += it.judul + " " + it.penulis + " " + it.tahunTerbit + " " + it.penerbit + " " + it.isbn + " " + std::to_string(it.stock) + "\n";
     }
 
-    datas << bufferData;
-    datas.close();
+    datasFile << bufferData;
+    datasFile.close();
 }
 void app::ambilDataBuku()
 {
-    fstream datas("./datas/datas.txt");
+    fstream datasFile("./datas/datas.txt");
     Data.clear();
     std::string line;
-    while (getline(datas, line))
+    while (getline(datasFile, line))
     {
         std::istringstream iss(line);
         std::string data, judul, penulis, tahunterbit, penerbit, isbn;
@@ -252,83 +409,65 @@ void app::ambilDataBuku()
             }
             index++;
         }
-        tambahBuku(judul, penulis, tahunterbit, penerbit, isbn, stock);
+        tambahDataBuku(judul, penulis, tahunterbit, penerbit, isbn, stock);
     };
 
-    datas.close();
+    datasFile.close();
 };
-
-// fitur sampingan
-bool app::inisialiasiUser()
+void app::ambilDataMember()
 {
-    ifstream pengguna("./datas/pengguna.txt");
-    bool status = false;
+    fstream memberFile("./datas/member.txt");
 
-    if (pengguna.is_open())
+    std::string line, word, fullname, username, password, status;
+    int id, index;
+
+    while (getline(memberFile, line))
     {
-        char buffer[1];
-        pengguna.getline(buffer, 2);
-        if (pengguna.gcount() > 0)
+        index = 0;
+        std::istringstream frmtLine(line);
+        while (frmtLine >> word)
         {
-            status = true;
-        }
-    }
-    pengguna.close();
-    return status;
-}
-void app::createUser(std::string username, std::string password)
-{
-    ofstream writePengguna("./datas/pengguna.txt");
-
-    std::replace(username.begin(), username.end(), ' ', '_');
-    std::replace(password.begin(), password.end(), ' ', '_');
-    writePengguna << username << " " << password;
-
-    writePengguna.close();
-}
-bool app::validasiAdmin(std::string inptusername, std::string inptpassword)
-{
-    fstream pengguna("./datas/pengguna.txt");
-
-    std::string line;
-    bool validate = false;
-
-    while (getline(pengguna, line))
-    {
-        std::istringstream iss(line);
-        std::string username, password, data;
-        int index = 0;
-        while (iss >> data)
-        {
-            std::replace(data.begin(), data.end(), '_', ' ');
             if (index == 0)
             {
-                username = data;
+                id = std::stoi(word);
             }
             else if (index == 1)
             {
-                password = data;
+                std::replace(word.begin(), word.end(), '_', ' ');
+                fullname = word;
+            }
+            else if (index == 2)
+            {
+                username = word;
+            }
+            else if (index == 3)
+            {
+                password = word;
+            }
+            else if (index == 4)
+            {
+                std::replace(word.begin(), word.end(), '_', ' ');
+                status = word;
             }
             index++;
         }
-
-        if (username == inptusername && password == inptpassword)
-        {
-            return validate = true;
-        }
+        DataMember.push_back({id, fullname, username, password, status});
     }
-    pengguna.close();
-    return validate;
+    memberFile.close();
 }
+
+// fungsi pendukung
 int app::ambilJumlahData()
 {
     return Data.size();
 }
-std::string app::capitalize (std::string input) 
+std::string app::capitalize(std::string input)
 {
     int inputSize = input.size();
-    for(int i = 0; i < inputSize; i++) {
-        if(i == 0 || input[i - 1] == ' ') {
+    for (int i = 0; i < inputSize; i++)
+    {
+        if (i == 0 || input[i - 1] == ' ')
+        {
             input[i] = toupper(input[i]);
         }
     }
