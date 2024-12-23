@@ -262,6 +262,7 @@ void app::ambilDataBuku()
 bool app::inisialiasiUser()
 {
     ifstream pengguna("./datas/pengguna.txt");
+    bool status = false;
 
     if (pengguna.is_open())
     {
@@ -269,11 +270,11 @@ bool app::inisialiasiUser()
         pengguna.getline(buffer, 2);
         if (pengguna.gcount() > 0)
         {
-            return true;
+            status = true;
         }
     }
-    return false;
     pengguna.close();
+    return status;
 }
 void app::createUser(std::string username, std::string password)
 {
