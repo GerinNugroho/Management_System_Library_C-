@@ -1,6 +1,4 @@
 #include "./include/interfaces.h"
-#include <iostream>
-#include <stdlib.h>
 using namespace std;
 
 int main()
@@ -8,29 +6,30 @@ int main()
     interfaces interface;
 
 loginSelection:
-    char login = interface.loginSelection();
+    char callback = interface.loginSelection();
 
-    if (login == '1')
+    if (callback == '1')
     {
         bool member;
     menuMasukMember:
-        login = interface.menuMasukMember();
+        callback = interface.menuMasukMember();
 
-        if (login == '1')
+        if (callback == '1')
         {
             interface.signMember();
         }
-        else if (login == '2')
+        else if (callback == '2')
         {
-            if(!interface.loginMember()) {
+            if (!interface.loginMember())
+            {
                 goto menuMasukMember;
             }
         }
-        else if (login == '3')
+        else if (callback == '3')
         {
             goto loginSelection;
         }
-        else if (login == '4')
+        else if (callback == '4')
         {
             cin.ignore();
             cout << "Terima kasih sudah menggunakan program kami!";
@@ -47,7 +46,8 @@ loginSelection:
         }
 
     menuMember:
-        switch (interface.menuMember())
+        callback = interface.menuMember();
+        switch (callback)
         {
         case '1':
             interface.tampilkanBukuMember();
@@ -59,8 +59,12 @@ loginSelection:
             break;
         case '3':
             interface.pinjamBukuMember();
+            goto menuMember;
             break;
         case '4':
+            interface.kembalikanBukuMember();
+            goto menuMember;
+            break;
             break;
         case '5':
             goto menuMasukMember;
@@ -71,7 +75,7 @@ loginSelection:
             break;
         }
     }
-    else if (login == '2')
+    else if (callback == '2')
     {
         interface.initAdmin();
 
@@ -81,54 +85,88 @@ loginSelection:
             goto loginAdmin;
         }
 
+        char indexPage = '0';
     menuAdmin:
-        switch (interface.menuAdmin())
+        string chooseAdmin = interface.menuAdmin(indexPage);
+        if (chooseAdmin == "1")
         {
-        case '1':
             interface.tambahDataBuku();
             goto menuAdmin;
-            break;
-        case '2':
+        }
+        else if (chooseAdmin == "2")
+        {
             interface.hapusDataBuku();
             goto menuAdmin;
-            break;
-        case '3':
+        }
+        else if (chooseAdmin == "3")
+        {
             interface.editDataBuku();
             goto menuAdmin;
-            break;
-        case '4':
+        }
+        else if (chooseAdmin == "4")
+        {
             interface.sortirDataBuku();
             goto menuAdmin;
-            break;
-        case '5':
+        }
+        else if (chooseAdmin == "5")
+        {
             interface.cariDataBuku();
             goto menuAdmin;
-            break;
-        case '6':
+        }
+        else if (chooseAdmin == "6")
+        {
             interface.tampilkanDataBuku();
             goto menuAdmin;
-            break;
-        case '7':
+        }
+        else if (chooseAdmin == "7")
+        {
+            interface.tampilkanDataMember();
+            goto menuAdmin;
+        }
+        else if (chooseAdmin == "8")
+        {
+            interface.hapusDataMember();
+            goto menuAdmin;
+        }
+        else if (chooseAdmin == "9")
+        {
+            interface.cariFilterDataMember();
+            goto menuAdmin;
+        }
+        else if (chooseAdmin == "10")
+        {
             interface.exportData();
             goto menuAdmin;
-            break;
-        case '8':
+        }
+        else if (chooseAdmin == "11")
+        {
             interface.buatDatabaseSql();
             goto menuAdmin;
-            break;
-        case '9':
+        }
+        else if (chooseAdmin == "12")
+        {
             interface.simpanDataBuku();
-            break;
-        default:
+        }
+        else if (chooseAdmin == "n")
+        {
+            indexPage = '1';
+            goto menuAdmin;
+        }
+        else if (chooseAdmin == "p")
+        {
+            indexPage = '0';
+            goto menuAdmin;
+        }
+        else
+        {
             cin.ignore();
             cout << "Masukkan angka yang benar!";
             cin.get();
             system("cls");
             goto menuAdmin;
-            break;
-        };
+        }
     }
-    else if (login == '3')
+    else if (callback == '3')
     {
     }
     else
@@ -139,7 +177,6 @@ loginSelection:
         system("cls");
         goto loginSelection;
     };
-    cin.ignore();
     cout << "Terima kasih sudah menggunakan program kami!";
     cin.get();
     return 0;

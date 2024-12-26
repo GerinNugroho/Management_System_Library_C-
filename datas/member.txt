@@ -1,3 +1,5 @@
-2 Gerin gerin 232 Tidak_Meminjam
-2 Gerin gerin 2324 Tidak_Meminjam
-3 Muhammad_Gerin_Nugroho nugroho 1234 Tidak_Meminjam
+1 Muhammad_Gerin_Nugroho sir_Gerin 2345 Tidak_Meminjam   
+2 Sir_Cappy cappy 456 Meminjam Gerakan_30_September  
+3 Volbora sir_vol 567 Tidak_Meminjam   
+4 Nugroho nug 123 Tidak_Meminjam
+5 Dimas_Ukin ukin 345 Tidak_Meminjam

@@ -24,6 +24,9 @@ struct structureMember
     std::string username;
     std::string password;
     std::string status;
+    std::string judul1;
+    std::string judul2;
+    std::string judul3;
 };
 
 class app
@@ -31,6 +34,7 @@ class app
 private:
     std::vector<structureData> Data;
     std::vector<structureMember> DataMember;
+    int idActiveMember;
 
 public:
     // fitur untuk admin
@@ -45,20 +49,27 @@ public:
     bool inisialiasiAdmin();
     void buatAdmin(std::string username, std::string password);
     bool authentikasiAdmin(std::string username, std::string password);
-    
+    void tampilkanDataMember(int ukuranPage, int indexPage);
+    void hapusDataMember(std::string username);
+    void cariFilterDataMember(std::string input);
+
     // fitur untuk member
-    void simpanDataMember (std::string fullname, std::string username, std::string password);
+    void daftarDataMember(std::string fullname, std::string username, std::string password);
     bool masukMember(std::string username, std::string password);
     void tampilkanBukuMember(int ukuranPage, int indexPage);
     void cariBukuMember(std::string input);
-    void pinjamBukuMember(std::string judul);
+    void pinjamBukuMember(std::string judul, std::string activeMember, int id);
+    void kembalikanBukuMember(std::string activeMember, int id);
 
     // storage system
     void simpanDataBuku();
     void ambilDataBuku();
-    void ambilDataMember ();
+    void ambilDataMember();
+    void simpanDataMember();
 
     // fungsi pendukung
     int ambilJumlahData();
-    std::string capitalize(std::string input);
+    std::string textFormat(std::string input, std::string form);
+    int ambilIdMemberActive();
+    int ambilJumlahDataMember();
 };

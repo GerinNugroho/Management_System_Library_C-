@@ -30,9 +30,14 @@ void app::tampilkanDataBuku(int ukuranPage, int indexPage)
 bool app::cariDataBuku(std::string input)
 {
     bool find = false;
+    bool penulis, judul, isbn;
     for (auto it : Data)
     {
-        if (it.penulis == input || it.judul == input || it.isbn == input)
+        penulis = textFormat(it.penulis, "low") == textFormat(input, "low");
+        judul = textFormat(it.judul, "low") == textFormat(input, "low");
+        isbn = it.isbn == input;
+        
+        if ( penulis || judul || isbn )
         {
             std::cout << "\nJudul: " << it.judul << "\nPenulis: " << it.penulis << "\nTahun Terbit: " << it.tahunTerbit << "\nPenerbit: " << it.penerbit << "\nISBN: " << it.isbn << "\nStock: " << it.stock << std::endl;
             find = true;
@@ -43,7 +48,7 @@ bool app::cariDataBuku(std::string input)
 bool app::tambahDataBuku(std::string judul, std::string penulis, std::string tahunTerbit, std::string penerbit, std::string ISBN, int stock = 0)
 {
     int beforeAdd = Data.size();
-    std::string frmtJudul = capitalize(judul), frmtPenulis = capitalize(penulis), frmtPenerbit = capitalize(penerbit);
+    std::string frmtJudul = textFormat(judul, "cap"), frmtPenulis = textFormat(penulis, "cap"), frmtPenerbit = textFormat(penerbit, "cap");
 
     Data.push_back({frmtJudul, frmtPenulis, tahunTerbit, frmtPenerbit, ISBN, stock});
 
@@ -51,15 +56,16 @@ bool app::tambahDataBuku(std::string judul, std::string penulis, std::string tah
     {
         return false;
     }
+    simpanDataBuku();
     return true;
 }
 bool app::hapusDataBuku(std::string Judul)
 {
     int beforeErase = Data.size(), index = 0;
-    std::string frmtJudul = capitalize(Judul);
+    std::string frmtJudul = textFormat(Judul, "low");
     for (auto it : Data)
     {
-        if (it.judul == frmtJudul)
+        if (textFormat(it.judul, "low") == frmtJudul)
         {
             Data.erase(Data.begin() + index);
         };
@@ -133,7 +139,24 @@ void app::buatDatabase()
         list++;
     }
 
-    sql << "ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`); COMMIT;";
+    sql << "CREATE TABLE `member`(`ID_MEMBER` varchar(10) NOT NULL,`NAMA_LENGKAP` varchar(150) DEFAULT NULL,`USERNAME` varchar(150) DEFAULT NULL,`PASSWORD` varchar(150) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `member`(`ID_MEMBER`, `NAMA_LENGKAP`, `USERNAME`, `PASSWORD`) VALUES";
+
+    list = 1;
+
+    for (auto itMember : DataMember)
+    {
+        if (list == DataMember.size())
+        {
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\');";
+        }
+        else
+        {
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\'),";
+        }
+        list++;
+    }
+
+    sql << "ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`);ALTER TABLE `member` ADD PRIMARY KEY (`ID_MEMBER`); COMMIT;";
     sql.close();
 }
 bool app::editDataBuku(std::string input)
@@ -142,7 +165,7 @@ bool app::editDataBuku(std::string input)
     int index = 0;
     for (auto it : Data)
     {
-        if (it.judul == capitalize(input) || it.isbn == input)
+        if (textFormat(it.judul, "low") == textFormat(input, "low") || it.isbn == input)
         {
             std::cout << "\nData yang akan diedit" << std::endl;
             std::cout << "Judul: " << it.judul << "\nPenulis: " << it.penulis << "\nTahun Terbit: " << it.tahunTerbit << "\nPenerbit: " << it.penerbit << "\nISBN: " << it.isbn << "\nStock: " << it.stock << std::endl;
@@ -166,13 +189,13 @@ bool app::editDataBuku(std::string input)
 
             stock = stock == "-" ? std::to_string(it.stock) : stock;
             Data[index] = {
-                judul == "-" ? it.judul : capitalize(judul),
-                penulis == "-" ? it.penulis : capitalize(penulis),
+                judul == "-" ? it.judul : textFormat(judul, "cap"),
+                penulis == "-" ? it.penulis : textFormat(penulis, "cap"),
                 tahunTerbit == "-" ? it.tahunTerbit : tahunTerbit,
-                penerbit == "-" ? it.penerbit : capitalize(penerbit),
+                penerbit == "-" ? it.penerbit : textFormat(penerbit, "cap"),
                 ISBN == "-" ? it.isbn : ISBN,
                 std::stoi(stock)};
-            std::cout << "Data berhasil di edit" << std::endl;
+            simpanDataBuku();
             return edited = true;
         }
     }
@@ -260,12 +283,61 @@ bool app::authentikasiAdmin(std::string username, std::string password)
     adminFile.close();
     return validate;
 }
-
-// fitur untuk member 
-void app::simpanDataMember(std::string fullname, std::string username, std::string password)
+void app::tampilkanDataMember(int ukuranPage, int indexPage) 
 {
-    std::string frmtFullname = capitalize(fullname), status = "Tidak Meminjam";
+    int startIndex = indexPage * ukuranPage;
+    int endIndex = startIndex + ukuranPage;
+    if(!DataMember.size()) {
+        std::cout << "Tidak ada data member!" << std::endl;
+    }
+
+    if(startIndex >= DataMember.size()) {
+        std::cout << "Halaman Tidak Valid!" << std::endl;
+        return;
+    }
+
+    for(int i = startIndex; i < endIndex && i < DataMember.size(); i++){
+        std::cout << "\nNama Lengkap: " << DataMember[i].fullname << "\nUsername: " << DataMember[i].username << "\nPassword: " << DataMember[i].password << "\nStatus: " << DataMember[i].status << std::endl;
+    }
+}
+void app::hapusDataMember(std::string username)
+{
+    int index = 0;
+    for(auto it : DataMember) {
+        if(it.username == username) {
+            DataMember.erase(DataMember.begin() + index);
+            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nStatus: " << it.status << std::endl; 
+            std::cout << "Data berhasil di hapus!" << std::endl;
+            simpanDataMember();
+            return;
+        }
+        index++;
+    }
+    std::cout << "Data gagal dihapus!" << std::endl;
+}
+void app::cariFilterDataMember(std::string input)
+{
+    bool find = false;
+    for(auto it : DataMember) {
+        if(it.username == input && it.status != input) {
+            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << std::endl;
+            return;
+        }else if(it.username != input && it.status == input) {
+            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << std::endl;
+            find = true;
+        }
+    }
+    if(!find) {
+        std::cout << "Data tidak ditemukan!" << std::endl;
+    }
+};
+
+// fitur untuk member
+void app::daftarDataMember(std::string fullname, std::string username, std::string password)
+{
+    std::string frmtFullname = textFormat(fullname, "cap"), status = "Tidak Meminjam";
     int id = DataMember.size() + 1;
+    idActiveMember = id;
 
     DataMember.push_back({id, frmtFullname, username, password, status});
 
@@ -284,6 +356,7 @@ bool app::masukMember(std::string username, std::string password)
     {
         if (it.username == username && it.password == password)
         {
+            idActiveMember = it.id;
             return true;
         }
     }
@@ -329,7 +402,7 @@ void app::cariBukuMember(std::string input)
         std::cout << "Buku tidak ditemukan!" << std::endl;
     }
 }
-void app::pinjamBukuMember(std::string judul)
+void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
 {
     bool find = false;
     int index = 0;
@@ -337,8 +410,33 @@ void app::pinjamBukuMember(std::string judul)
     {
         if (it.judul == judul)
         {
-            Data[index].stock -= 1;
-            find = true;
+            for (int i = 0; i < DataMember.size(); i++)
+            {
+                if (DataMember[i].username == activeMember && DataMember[i].id == id)
+                {
+                    if (DataMember[i].judul1.empty())
+                    {
+                        DataMember[i].judul1 = judul;
+                    }
+                    else if (DataMember[i].judul2.empty())
+                    {
+                        DataMember[i].judul2 = judul;
+                    }
+                    else if (DataMember[i].judul3.empty())
+                    {
+                        DataMember[i].judul3 = judul;
+                    }
+                    else
+                    {
+                        std::cout << "Hanya dapat meminjam 3 judul saja!" << std::endl;
+                        return;
+                    }
+
+                    Data[index].stock -= 1;
+                    DataMember[i].status = "Meminjam";
+                    find = true;
+                }
+            }
         }
         index++;
     }
@@ -350,7 +448,51 @@ void app::pinjamBukuMember(std::string judul)
 
     std::cout << "Buku berhasil dipinjam!" << std::endl;
     simpanDataBuku();
+    simpanDataMember();
 }
+void app::kembalikanBukuMember(std::string activeMember, int id)
+{
+    int index = 0;
+    for (auto it : DataMember)
+    {
+        if (it.username == activeMember && it.id == id)
+        {
+            if (it.judul1.empty())
+            {
+                std::cout << "Anda belum melakukan peminjaman!" << std::endl;
+                return;
+            };
+            std::cout << "1. " << it.judul1 << std::endl;
+            std::cout << "2. " << it.judul2 << std::endl;
+            std::cout << "3. " << it.judul3 << std::endl;
+
+            for (int i = 0; i < Data.size(); i++)
+            {
+                if (Data[i].judul == it.judul1)
+                {
+                    Data[i].stock += 1;
+                }
+                else if (Data[i].judul == it.judul2)
+                {
+                    Data[i].stock += 1;
+                }
+                else if (Data[i].judul == it.judul3)
+                {
+                    Data[i].stock += 1;
+                }
+            }
+            DataMember[index].judul1.clear();
+            DataMember[index].judul2.clear();
+            DataMember[index].judul3.clear();
+            DataMember[index].status = "Tidak Meminjam";
+            simpanDataBuku();
+            simpanDataMember();
+            std::cout << "Buku berhasil dikembalikan!" << std::endl;
+            return;
+        }
+        index++;
+    }
+};
 
 // storage system
 void app::simpanDataBuku()
@@ -418,7 +560,7 @@ void app::ambilDataMember()
 {
     fstream memberFile("./datas/member.txt");
 
-    std::string line, word, fullname, username, password, status;
+    std::string line, word, fullname, username, password, status, judul1, judul2, judul3;
     int id, index;
 
     while (getline(memberFile, line))
@@ -449,9 +591,40 @@ void app::ambilDataMember()
                 std::replace(word.begin(), word.end(), '_', ' ');
                 status = word;
             }
+            else if (index == 5)
+            {
+                std::replace(word.begin(), word.end(), '_', ' ');
+                judul1 = word;
+            }
+            else if (index == 6)
+            {
+                std::replace(word.begin(), word.end(), '_', ' ');
+                judul2 = word;
+            }
+            else if (index == 7)
+            {
+                std::replace(word.begin(), word.end(), '_', ' ');
+                judul3 = word;
+            }
             index++;
         }
-        DataMember.push_back({id, fullname, username, password, status});
+        DataMember.push_back({id, fullname, username, password, status, judul1, judul2, judul3});
+    }
+    memberFile.close();
+}
+void app::simpanDataMember()
+{
+    std::remove("./datas/member.txt");
+    ofstream memberFile("./datas/member.txt", std::ios::app);
+
+    for (auto it : DataMember)
+    {
+        std::replace(it.status.begin(), it.status.end(), ' ', '_');
+        std::replace(it.fullname.begin(), it.fullname.end(), ' ', '_');
+        std::replace(it.judul1.begin(), it.judul1.end(), ' ', '_');
+        std::replace(it.judul2.begin(), it.judul3.end(), ' ', '_');
+        std::replace(it.judul3.begin(), it.judul3.end(), ' ', '_');
+        memberFile << it.id << " " << it.fullname << " " << it.username << " " << it.password << " " << it.status << " " << it.judul1 << " " << it.judul2 << " " << it.judul3 << std::endl;
     }
     memberFile.close();
 }
@@ -461,15 +634,26 @@ int app::ambilJumlahData()
 {
     return Data.size();
 }
-std::string app::capitalize(std::string input)
+std::string app::textFormat(std::string input, std::string form)
 {
     int inputSize = input.size();
     for (int i = 0; i < inputSize; i++)
     {
-        if (i == 0 || input[i - 1] == ' ')
+        if ((i == 0 || input[i - 1] == ' ') && form == "cap")
         {
             input[i] = toupper(input[i]);
+        }else if((true) && form == "low")
+        {
+            input[i] = tolower(input[i]);
         }
     }
     return input;
+}
+int app::ambilIdMemberActive()
+{
+    return idActiveMember;
+}
+int app::ambilJumlahDataMember()
+{
+    return DataMember.size();
 }
