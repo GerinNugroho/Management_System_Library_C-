@@ -80,9 +80,9 @@ bool app::hapusDataBuku(std::string Judul)
 void app::exportDataBuku()
 {
 
-    std::remove("./library.xls");
+    std::remove("./buku.xls");
 
-    ofstream data("./library.xls", std::ios::app);
+    ofstream data("./buku.xls", std::ios::app);
 
     data << "<?xml version=\"1.0\"?><?mso-application progid=\"Excel.Sheet\"?><Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
 
@@ -115,6 +115,47 @@ void app::exportDataBuku()
 
     data.close();
 };
+void app::exportDataMember()
+{
+
+    std::remove("./member.xls");
+
+    ofstream memberFile("./member.xls", std::ios::app);
+
+    memberFile << "<?xml version=\"1.0\"?><?mso-application progid=\"Excel.Sheet\"?><Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
+
+    memberFile << "<Styles><Style ss:ID=\"s63\"><Alignment ss:Horizontal=\"Center\" ss:Vertical=\"Bottom\"/><Borders><Border ss:Position=\"Bottom\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Left\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Right\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Top\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/></Borders></Style>";
+
+    memberFile << "<Style ss:ID=\"s64\"><Borders><Border ss:Position=\"Bottom\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Left\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Right\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/><Border ss:Position=\"Top\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\"/></Borders></Style></Styles>";
+
+    memberFile << "<Worksheet ss:Name=\"Sheet1\"><Table><Column ss:Index=\"2\" ss:AutoFitWidth=\"0\" ss:Width=\"100\" ss:Span=\"1\"/>";
+    memberFile << "<Row ss:Index=\"2\"> <Cell ss:Index=\"2\" ss:StyleID=\"s63\"><Data ss:Type=\"String\">ID Member</Data></Cell>";
+    memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Nama Lengkap</Data></Cell>";
+    memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Username</Data></Cell>";
+    memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Password</Data></Cell>";
+    memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Status Peminjaman</Data></Cell>";
+    memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">Judul</Data></Cell>";
+    memberFile << " </Row>";
+
+    for (auto it : DataMember)
+    {
+        std::string judul1 = it.judul1;
+        std::string judul2 = it.judul2;
+        std::string judul3 = it.judul3;
+        memberFile << "<Row>";
+        memberFile << "<Cell ss:Index=\"2\" ss:StyleID=\"s63\"><Data ss:Type=\"Number\">" << it.id << "</Data></Cell>";
+        memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << it.fullname << "</Data></Cell>";
+        memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << it.username << "</Data></Cell>";
+        memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << it.password << "</Data></Cell>";
+        memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << it.status << "</Data></Cell>";
+        memberFile << " <Cell ss:StyleID=\"s63\"><Data ss:Type=\"String\">" << judul1 << ", " << judul2 << ", " << judul3 << "</Data></Cell>";
+        memberFile << "</Row>";
+    };
+
+    memberFile << "</Table></Worksheet></Workbook>";
+
+    memberFile.close();
+};
 void app::buatDatabase()
 {
 
@@ -139,7 +180,7 @@ void app::buatDatabase()
         list++;
     }
 
-    sql << "CREATE TABLE `member`(`ID_MEMBER` varchar(10) NOT NULL,`NAMA_LENGKAP` varchar(150) DEFAULT NULL,`USERNAME` varchar(150) DEFAULT NULL,`PASSWORD` varchar(150) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `member`(`ID_MEMBER`, `NAMA_LENGKAP`, `USERNAME`, `PASSWORD`) VALUES";
+    sql << "CREATE TABLE `member`(`ID_MEMBER` varchar(10) NOT NULL,`NAMA_LENGKAP` varchar(150) DEFAULT NULL,`USERNAME` varchar(150) DEFAULT NULL,`PASSWORD` varchar(150) DEFAULT NULL,`STATUS` varchar(150) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `member`(`ID_MEMBER`, `NAMA_LENGKAP`, `USERNAME`, `PASSWORD`, `STATUS`) VALUES";
 
     list = 1;
 
@@ -147,11 +188,11 @@ void app::buatDatabase()
     {
         if (list == DataMember.size())
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\');";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status << "\');";
         }
         else
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\'),";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status <<"\'),";
         }
         list++;
     }
@@ -297,7 +338,7 @@ void app::tampilkanDataMember(int ukuranPage, int indexPage)
     }
 
     for(int i = startIndex; i < endIndex && i < DataMember.size(); i++){
-        std::cout << "\nNama Lengkap: " << DataMember[i].fullname << "\nUsername: " << DataMember[i].username << "\nPassword: " << DataMember[i].password << "\nStatus: " << DataMember[i].status << std::endl;
+        std::cout << "\nNama Lengkap: " << DataMember[i].fullname << "\nUsername: " << DataMember[i].username << "\nPassword: " << DataMember[i].password << "\nStatus: " << DataMember[i].status << "\nJudul: " << DataMember[i].judul1 << ", " << DataMember[i].judul2 << ", " << DataMember[i].judul3 << std::endl;
     }
 }
 void app::hapusDataMember(std::string username)
@@ -362,7 +403,7 @@ bool app::masukMember(std::string username, std::string password)
     }
     return false;
 }
-void app::tampilkanBukuMember(int ukuranPage, int indexPage)
+void app::tampilkanDataBukuMember(int ukuranPage, int indexPage)
 {
     int startIndex = indexPage * ukuranPage;
     int endIndex = startIndex + ukuranPage;
@@ -386,10 +427,13 @@ void app::tampilkanBukuMember(int ukuranPage, int indexPage)
 void app::cariBukuMember(std::string input)
 {
     bool find = false;
+    bool judul, penulis;
     int index = 1;
     for (auto it : Data)
     {
-        if (it.judul == input || it.penulis == input)
+        judul = textFormat(it.judul, "low") == textFormat(input, "low");
+        penulis = textFormat(it.penulis, "low") == textFormat(input, "low");
+        if (judul || penulis)
         {
             std::cout << "\nBuku " << index << "\nJudul: " << it.judul
                       << "\nPenulis: " << it.penulis << "\nPenerbit: " << it.penerbit << std::endl;
@@ -408,7 +452,7 @@ void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
     int index = 0;
     for (auto it : Data)
     {
-        if (it.judul == judul)
+        if (textFormat(it.judul, "low") == textFormat(judul, "low"))
         {
             for (int i = 0; i < DataMember.size(); i++)
             {
@@ -493,6 +537,19 @@ void app::kembalikanBukuMember(std::string activeMember, int id)
         index++;
     }
 };
+void app::tampilkanBukuMember(std::string activeMember, int id)
+{
+    for(auto it : DataMember) {
+        if(it.username == activeMember &&  it.id == id) {
+            if(it.judul1.empty()) {
+                std::cout << "Anda belum meminjam buku" << std::endl;
+                return;
+            }
+            std::cout << "\n" << it.fullname << "\nJudul1: " << it.judul1 << "\nJudul2: " << it.judul2 << "\nJudul3: " << it.judul3 << std::endl;
+            return;
+        }
+    }
+}
 
 // storage system
 void app::simpanDataBuku()
@@ -580,6 +637,7 @@ void app::ambilDataMember()
             }
             else if (index == 2)
             {
+                std::replace(word.begin(), word.end(), '_', ' ');
                 username = word;
             }
             else if (index == 3)
@@ -609,6 +667,9 @@ void app::ambilDataMember()
             index++;
         }
         DataMember.push_back({id, fullname, username, password, status, judul1, judul2, judul3});
+        judul1.clear();
+        judul2.clear();
+        judul3.clear();
     }
     memberFile.close();
 }

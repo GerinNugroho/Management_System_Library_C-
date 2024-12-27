@@ -44,6 +44,7 @@ public:
     bool editDataBuku(std::string input);
     bool tambahDataBuku(std::string judul, std::string penulis, std::string tahunTerbit, std::string penerbit, std::string ISBN, int stock);
     void exportDataBuku();
+    void exportDataMember();
     void buatDatabase();
     void sortirDataBuku(char input);
     bool inisialiasiAdmin();
@@ -56,10 +57,11 @@ public:
     // fitur untuk member
     void daftarDataMember(std::string fullname, std::string username, std::string password);
     bool masukMember(std::string username, std::string password);
-    void tampilkanBukuMember(int ukuranPage, int indexPage);
+    void tampilkanDataBukuMember(int ukuranPage, int indexPage);
     void cariBukuMember(std::string input);
     void pinjamBukuMember(std::string judul, std::string activeMember, int id);
     void kembalikanBukuMember(std::string activeMember, int id);
+    void tampilkanBukuMember(std::string activeMember, int id);
 
     // storage system
     void simpanDataBuku();

@@ -50,7 +50,7 @@ loginSelection:
         switch (callback)
         {
         case '1':
-            interface.tampilkanBukuMember();
+            interface.tampilkanDataBukuMember();
             goto menuMember;
             break;
         case '2':
@@ -67,11 +67,21 @@ loginSelection:
             break;
             break;
         case '5':
-            goto menuMasukMember;
+            interface.tampilkanBukuMember();
+            goto menuMember;
             break;
         case '6':
+            goto menuMasukMember;
+            break;
+        case '7':
+            interface.simpanData();
             break;
         default:
+            cin.ignore();
+            cout << "Masukkan angka yang benar!";
+            cin.get();
+            system("cls");
+            goto menuMember;
             break;
         }
     }
@@ -143,9 +153,13 @@ loginSelection:
             interface.buatDatabaseSql();
             goto menuAdmin;
         }
-        else if (chooseAdmin == "12")
+        else if(chooseAdmin == "12")
         {
-            interface.simpanDataBuku();
+            goto loginSelection;
+        }
+        else if (chooseAdmin == "13")
+        {
+            interface.simpanData();
         }
         else if (chooseAdmin == "n")
         {
@@ -168,6 +182,7 @@ loginSelection:
     }
     else if (callback == '3')
     {
+        interface.simpanData();
     }
     else
     {

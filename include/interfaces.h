@@ -92,7 +92,8 @@ public:
             std::cout << "========== System Management Data Perpustakaan ==========" << std::endl;
             std::cout << "10. Export data buku" << std::endl;
             std::cout << "11. Buat database sql" << std::endl;
-            std::cout << "12. Keluar program" << std::endl;
+            std::cout << "12. Kembali" << std::endl;
+            std::cout << "13. Keluar program" << std::endl;
         }
         std::cout << "NOTE: Silahkan isi \'n\' untuk next dan \'p\' untuk previous" << std::endl;
         std::cout << "Pilih dari menu: ";
@@ -322,7 +323,7 @@ public:
             std::cout << "========== Tampilkan Data Buku ==========" << std::endl;
             utils.tampilkanDataBuku(ukuranPage, indexPage);
             std::cout << "NOTE: \'n\' untuk next, \'p\' untuk previous, \'q\' untuk lanjut" << std::endl;
-            std::cout << "Masukkan input: ";
+            std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
             if (choose == 'n')
@@ -363,6 +364,7 @@ public:
     void exportData()
     {
         utils.exportDataBuku();
+        utils.exportDataMember();
         std::cout << "Data telah berhasil di export" << std::endl;
         std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan! ";
@@ -378,9 +380,10 @@ public:
         std::cin.get();
         system("cls");
     }
-    void simpanDataBuku()
+    void simpanData()
     {
         utils.simpanDataBuku();
+        utils.simpanDataMember();
     };
     void tampilkanDataMember()
     {
@@ -514,22 +517,23 @@ public:
         std::cout << "2. Cari Buku" << std::endl;
         std::cout << "3. Pinjam Buku" << std::endl;
         std::cout << "4. Kembalikan Buku" << std::endl;
-        std::cout << "5. keluar" << std::endl;
-        std::cout << "6. keluar Program" << std::endl;
+        std::cout << "5. Tampilkan Buku Member" << std::endl;
+        std::cout << "6. kembali" << std::endl;
+        std::cout << "7. keluar Program" << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
         system("cls");
         return choose;
     }
-    void tampilkanBukuMember()
+    void tampilkanDataBukuMember()
     {
         do
         {
             system("cls");
             std::cout << "========== Buku yang tersedia ==========" << std::endl;
-            utils.tampilkanBukuMember(ukuranPage, indexPage);
+            utils.tampilkanDataBukuMember(ukuranPage, indexPage);
             std::cout << "NOTE: \'n\' untuk next, \'p\' untuk previous, \'q\' untuk lanjut" << std::endl;
-            std::cout << "Masukkan input: ";
+            std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
             if (choose == 'n')
@@ -583,9 +587,9 @@ public:
         {
             system("cls");
             std::cout << "========== Peminjaman Buku ==========" << std::endl;
-            utils.tampilkanBukuMember(ukuranPage, indexPage);
+            utils.tampilkanDataBukuMember(ukuranPage, indexPage);
             std::cout << "NOTE: \'n\' untuk next, \'p\' untuk previous, \'q\' untuk lanjut" << std::endl;
-            std::cout << "Masukkan input: ";
+            std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
             if (choose == 'n')
@@ -630,6 +634,16 @@ public:
         system("cls");
         std::cout << "========== Pengembalian Buku ==========" << std::endl;
         utils.kembalikanBukuMember(activeMember, idMember);
+        std::cin.ignore();
+        std::cout << "Tekan enter untuk melanjutkan! ";
+        std::cin.get();
+        system("cls");
+    }
+    void tampilkanBukuMember()
+    {
+        system("cls");
+        std::cout << "========== Buku Yang Dipinjam ==========" << std::endl;
+        utils.tampilkanBukuMember(activeMember, idMember);
         std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan! ";
         std::cin.get();
