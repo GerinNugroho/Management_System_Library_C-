@@ -197,7 +197,5 @@ loginSelection:
         system("cls");
         goto loginSelection;
     };
-    std::cout << "Anda telah keluar dari program! ";
-    cin.get();
     return 0;
 }

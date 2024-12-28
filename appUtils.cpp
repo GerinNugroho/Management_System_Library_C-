@@ -180,19 +180,20 @@ void app::buatDatabase()
         list++;
     }
 
-    sql << "CREATE TABLE `member`(`ID_MEMBER` varchar(10) NOT NULL,`NAMA_LENGKAP` varchar(150) DEFAULT NULL,`USERNAME` varchar(150) DEFAULT NULL,`PASSWORD` varchar(150) DEFAULT NULL,`STATUS` varchar(150) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `member`(`ID_MEMBER`, `NAMA_LENGKAP`, `USERNAME`, `PASSWORD`, `STATUS`) VALUES";
+    sql << "CREATE TABLE `member`(`ID_MEMBER` varchar(10) NOT NULL,`NAMA_LENGKAP` varchar(150) DEFAULT NULL,`USERNAME` varchar(150) DEFAULT NULL,`PASSWORD` varchar(150) DEFAULT NULL,`STATUS` varchar(150) DEFAULT NULL,`JUDUL` varchar(150) DEFAULT NULL)ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `member`(`ID_MEMBER`, `NAMA_LENGKAP`, `USERNAME`, `PASSWORD`, `STATUS`, `JUDUL`) VALUES";
 
     list = 1;
 
     for (auto itMember : DataMember)
     {
+        std::string buffer = itMember.judul1 +", " + itMember.judul2 + ", " + itMember.judul3;
         if (list == DataMember.size())
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status << "\');";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status <<"\',\'" << buffer <<  "\');";
         }
         else
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status << "\'),";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status <<"\',\'" << buffer <<  "\'),";
         }
         list++;
     }
@@ -345,12 +346,12 @@ void app::cariFilterDataMember(std::string input)
     {
         if (it.username == input && it.status != input)
         {
-            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << std::endl;
+            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: "<< it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
             return;
         }
         else if (it.username != input && it.status == input)
         {
-            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << std::endl;
+            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: "<< it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
             find = true;
         }
     }
