@@ -40,6 +40,7 @@ public:
     {
         if (!utils.inisialiasiAdmin())
         {
+            system("cls");
             std::cout << "========== Inisialisasi Admin ==========" << std::endl;
             std::cout << "Buat username: ";
             getline(std::cin, username);
