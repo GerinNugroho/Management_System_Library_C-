@@ -34,6 +34,8 @@ class app
 private:
     std::vector<structureData> Data;
     std::vector<structureMember> DataMember;
+    std::string nameAdmin;
+    std::string passAdmin;
     int idActiveMember;
 
 public:
@@ -68,10 +70,12 @@ public:
     void ambilDataBuku();
     void ambilDataMember();
     void simpanDataMember();
+    void ambilDataAdmin();
 
     // fungsi pendukung
     int ambilJumlahData();
     std::string textFormat(std::string input, std::string form);
     int ambilIdMemberActive();
     int ambilJumlahDataMember();
+    void errorcheck();
 };

@@ -11,7 +11,7 @@ private:
     std::string input, judul, penulis, tahunterbit, penerbit, ISBN, stock;
     std::string username, password, fullname, activeMember;
     char choose;
-    int ukuranPage = 5, indexPage, jumlahData, idMember;
+    int ukuranPage = 3, indexPage, jumlahData, jumlahDataMember, idMember;
 
 public:
     interfaces()
@@ -31,36 +31,41 @@ public:
         std::cout << "3. Keluar Program" << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
-        system("cls");
+        std::cin.ignore();
         return choose;
     }
 
     // interfaces untuk admin
-    void initAdmin()
+    bool initAdmin()
     {
         if (!utils.inisialiasiAdmin())
         {
             std::cout << "========== Inisialisasi Admin ==========" << std::endl;
             std::cout << "Buat username: ";
-            std::cin.ignore();
             getline(std::cin, username);
             std::cout << "Buat password: ";
             getline(std::cin, password);
             utils.buatAdmin(username, password);
+            std::cout << "Inisialisai admin selesai! " << std::endl;
+            std::cout << "Tekan enter untuk lanjut ";
+            std::cin.get();
             system("cls");
+            return true;
         }
     }
     bool authentikasiAdmin()
     {
+        system("cls");
         std::cout << "========== Authentikasi Admin ==========" << std::endl;
         std::cout << "Masukkan Username: ";
-        std::cin.ignore();
         getline(std::cin, username);
         std::cout << "Masukkan Password: ";
         getline(std::cin, password);
 
         if (!utils.authentikasiAdmin(username, password))
         {
+            std::cout << "username dan password tidak cocok! ";
+            std::cin.get();
             system("cls");
             return false;
         };
@@ -71,7 +76,7 @@ public:
     {
         indexPage = 0;
         jumlahData = utils.ambilJumlahData();
-        std::string input;
+        jumlahDataMember = utils.ambilJumlahDataMember();
         if (index == '0')
         {
             system("cls");
@@ -97,12 +102,12 @@ public:
         }
         std::cout << "NOTE: Silahkan isi \'n\' untuk next dan \'p\' untuk previous" << std::endl;
         std::cout << "Pilih dari menu: ";
-        std::cin >> input;
-        system("cls");
+        std::cin >> input;;
         return input;
     }
     void tambahDataBuku()
     {
+        system("cls");
         std::cout << "========== Tambah Data Buku ==========" << std::endl;
         std::cout << "Masukkan Judul Buku: ";
         std::cin.ignore();
@@ -141,36 +146,41 @@ public:
             std::cout << "NOTE: \'n\' untuk next, \'p\' untuk previous, \'q\' untuk lanjut" << std::endl;
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
-            if (choose == 'n')
+
+            std::cin.ignore();
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < jumlahData)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman terakhir ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
+                    system("cls");
                 }
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman pertama ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
+                    system("cls");
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
                 system("cls");
+                break;
             }
         } while (choose == 'n' || choose == 'p');
         std::cout << "Masukkan Judul Buku: ";
-        std::cin.ignore();
         getline(std::cin, judul);
 
         if (utils.hapusDataBuku(judul))
@@ -196,43 +206,47 @@ public:
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
-            if (choose == 'n')
+            std::cin.ignore();
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < jumlahData)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman terakhir ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
+                    system("cls");
                 }
-                system("cls");
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman pertama ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
+                    system("cls");
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
                 system("cls");
+                break;
             }
         } while (choose == 'n' || choose == 'p');
         std::cout << "Masukkan Judul/ISBN buku: ";
-        std::cin.ignore();
         getline(std::cin, input);
         if (!utils.editDataBuku(input))
         {
             std::cout << "Gagal mengedit data buku!" << std::endl;
+        }else {
+            std::cout << "Berhasil mengedit data buku!" << std::endl;
         }
-        std::cout << "Berhasil mengedit data buku!" << std::endl;
         std::cout << "Tekan enter untuk melanjutkan! ";
         std::cin.get();
         system("cls");
@@ -263,39 +277,39 @@ public:
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
         utils.sortirDataBuku(choose);
-        std::cout << "\nList Data Hasil Sorting\n"
-                  << std::endl;
+        std::cout << "\nList Data Hasil Sorting\n"<< std::endl;
         do
         {
             utils.tampilkanDataBuku(ukuranPage, indexPage);
             std::cout << "NOTE: \'n\' untuk next, \'p\' untuk preveious, \'q\' untuk lanjut" << std::endl;
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
-            if (choose == 'n')
+
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < jumlahData)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman terakhir ";
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
                 }
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "Halaman pertama ";
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
+                break;
             }
         } while (choose == 'n' || choose == 'p');
         std::cout << "Apakah anda yakin dengan list ini(y/n): ";
@@ -304,13 +318,13 @@ public:
         if (choose == 'y')
         {
             std::cout << "Data hasil sortir disimpan" << std::endl;
+            utils.simpanDataBuku();
         }
         else if (choose == 'n')
         {
             std::cout << "Data hasil sortir dibatalkan" << std::endl;
             utils.ambilDataBuku();
         }
-        std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan";
         std::cin.get();
         system("cls");
@@ -326,37 +340,39 @@ public:
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
-            if (choose == 'n')
+            std::cin.ignore();
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < jumlahData)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman terakhir ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
+                    system("cls");
                 }
-                system("cls");
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman pertama ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
+                    system("cls");
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
                 system("cls");
+                break;
             }
         } while (choose == 'n' || choose == 'p');
-
-        std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan!";
         std::cin.get();
         system("cls");
@@ -399,7 +415,7 @@ public:
             switch (choose)
             {
             case 'n':
-                if((indexPage + 1) * ukuranPage < utils.ambilJumlahDataMember()) 
+                if((indexPage + 1) * ukuranPage < jumlahDataMember) 
                 {
                     indexPage++;
                 }else {
@@ -426,6 +442,7 @@ public:
         }while(choose == 'n' || choose == 'p');
         std::cout << "Tekan enter untuk lanjut! ";
         std::cin.get();
+        system("cls");
     }
     void hapusDataMember()
     {
@@ -460,11 +477,10 @@ public:
         std::cout << "========== Selamat Datang ==========" << std::endl;
         std::cout << "1. Daftar Member" << std::endl;
         std::cout << "2. Masuk Member" << std::endl;
-        std::cout << "3. Kembali " << std::endl;
+        std::cout << "3. kembali" << std::endl;
         std::cout << "4. Keluar Program" << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
-        system("cls");
         return choose;
     }
     void signMember()
@@ -522,7 +538,6 @@ public:
         std::cout << "7. keluar Program" << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> choose;
-        system("cls");
         return choose;
     }
     void tampilkanDataBukuMember()
@@ -536,35 +551,39 @@ public:
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
-            if (choose == 'n')
+            std::cin.ignore();
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < ukuranPage)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman terakhir ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
+                    system("cls");
                 }
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman pertama ";
+                    system("cls");
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
+                    system("cls");
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
+                system("cls");
+                break;
             }
         } while (choose == 'n' || choose == 'p');
-
-        std::cin.ignore();
         std::cout << "Tekan enter untuk melanjutkan!";
         std::cin.get();
         system("cls");
@@ -592,37 +611,35 @@ public:
             std::cout << "Masukkan perintah: ";
             std::cin >> choose;
 
-            if (choose == 'n')
+            std::cin.ignore();
+            switch (choose)
             {
-                if ((indexPage + 1) * ukuranPage < ukuranPage)
-                {
+            case 'n':
+                if((indexPage + 1) * ukuranPage  < jumlahData) {
                     indexPage++;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman terakhir ";
+                }else {
+                    std::cout << "Halaman Terakhir ";
                     std::cin.get();
-                    system("cls");
                 }
-            }
-            else if (choose == 'p')
-            {
-                if (indexPage > 0)
-                {
+                break;
+            case 'p':
+                if(indexPage > 0) {
                     indexPage--;
-                }
-                else
-                {
-                    std::cin.ignore();
-                    std::cout << "halaman pertama ";
+                }else {
+                    std::cout << "Halaman Pertama ";
                     std::cin.get();
-                    system("cls");
                 }
+                break;
+            case 'q':
+                break;
+            default:
+                std::cout << "Silahkan isi \'q\' untuk lanjut! ";
+                choose = 'n';
+                std::cin.get();
+                break;
             }
         } while (choose == 'n' || choose == 'p');
         std::cout << "Masukkan judul buku: ";
-        std::cin.ignore();
         getline(std::cin, judul);
         utils.pinjamBukuMember(judul, activeMember, idMember);
         std::cout << "Tekan enter untuk melanjutkan!";

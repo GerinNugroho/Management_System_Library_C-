@@ -10,7 +10,6 @@ loginSelection:
 
     if (callback == '1')
     {
-        bool member;
     menuMasukMember:
         callback = interface.menuMasukMember();
 
@@ -25,14 +24,15 @@ loginSelection:
                 goto menuMasukMember;
             }
         }
-        else if (callback == '3')
+        else if(callback == '3')
         {
             goto loginSelection;
         }
-        else if (callback == '4')
+        else if (callback == '4') 
         {
+            interface.simpanData();
             cin.ignore();
-            cout << "Terima kasih sudah menggunakan program kami!";
+            std::cout << "Anda telah keluar dari program! ";
             cin.get();
             return 0;
         }
@@ -65,7 +65,6 @@ loginSelection:
             interface.kembalikanBukuMember();
             goto menuMember;
             break;
-            break;
         case '5':
             interface.tampilkanBukuMember();
             goto menuMember;
@@ -75,7 +74,10 @@ loginSelection:
             break;
         case '7':
             interface.simpanData();
-            break;
+            cin.ignore();
+            std::cout << "Anda telah keluar dari program! ";
+            cin.get();
+            return 0;
         default:
             cin.ignore();
             cout << "Masukkan angka yang benar!";
@@ -89,10 +91,9 @@ loginSelection:
     {
         interface.initAdmin();
 
-    loginAdmin:
         if (!interface.authentikasiAdmin())
         {
-            goto loginAdmin;
+            goto loginSelection;
         }
 
         char indexPage = '0';
@@ -153,13 +154,17 @@ loginSelection:
             interface.buatDatabaseSql();
             goto menuAdmin;
         }
-        else if(chooseAdmin == "12")
+        else if (chooseAdmin == "12")
         {
             goto loginSelection;
         }
         else if (chooseAdmin == "13")
         {
             interface.simpanData();
+            cin.ignore();
+            std::cout << "Anda telah keluar dari program! ";
+            cin.get();
+            return 0;
         }
         else if (chooseAdmin == "n")
         {
@@ -192,7 +197,7 @@ loginSelection:
         system("cls");
         goto loginSelection;
     };
-    cout << "Terima kasih sudah menggunakan program kami!";
+    std::cout << "Anda telah keluar dari program! ";
     cin.get();
     return 0;
 }
