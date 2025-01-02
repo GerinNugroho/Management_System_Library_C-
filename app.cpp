@@ -24,15 +24,15 @@ loginSelection:
                 goto menuMasukMember;
             }
         }
-        else if(callback == '3')
+        else if (callback == '3')
         {
             goto loginSelection;
         }
-        else if (callback == '4') 
+        else if (callback == '4')
         {
             interface.simpanData();
             cin.ignore();
-            std::cout << "Anda telah keluar dari program! ";
+            cout << "Anda telah keluar dari program! ";
             cin.get();
             return 0;
         }
@@ -75,7 +75,7 @@ loginSelection:
         case '7':
             interface.simpanData();
             cin.ignore();
-            std::cout << "Anda telah keluar dari program! ";
+            cout << "Anda telah keluar dari program! ";
             cin.get();
             return 0;
         default:
@@ -162,7 +162,8 @@ loginSelection:
         {
             interface.simpanData();
             cin.ignore();
-            std::cout << "Anda telah keluar dari program! ";
+            cout << endl;
+            cout << "Anda telah keluar dari program! ";
             cin.get();
             return 0;
         }
@@ -188,6 +189,9 @@ loginSelection:
     else if (callback == '3')
     {
         interface.simpanData();
+        cout << "Anda telah keluar dari program! ";
+        cin.get();
+        return 0;
     }
     else
     {

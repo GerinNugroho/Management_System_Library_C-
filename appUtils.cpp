@@ -22,14 +22,16 @@ void app::tampilkanDataBuku(int ukuranPage, int indexPage)
 
     for (int i = startIndex; i < endIndex && i < Data.size(); i++)
     {
-        std::cout << "Buku " << i + 1 << "\nJudul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << "\n"
-                  << std::endl;
+        std::cout << "-------------------------------" << std::endl;
+        std::cout << "Buku " << i + 1 << "\nJudul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nTahun Terbit: " << Data[i].tahunTerbit << "\nPenerbit: " << Data[i].penerbit << "\nISBN: " << Data[i].isbn << "\nStock: " << Data[i].stock << std::endl;
+        std::cout << "-------------------------------" << std::endl;
     }
 };
 bool app::cariDataBuku(std::string input)
 {
     bool find = false;
     bool penulis, judul, isbn;
+    std::cout << "Data Yang Ditemukan" << std::endl;
     for (auto it : Data)
     {
         penulis = textFormat(it.penulis, "low") == textFormat(input, "low");
@@ -186,14 +188,14 @@ void app::buatDatabase()
 
     for (auto itMember : DataMember)
     {
-        std::string buffer = itMember.judul1 +", " + itMember.judul2 + ", " + itMember.judul3;
+        std::string buffer = itMember.judul1 + ", " + itMember.judul2 + ", " + itMember.judul3;
         if (list == DataMember.size())
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status <<"\',\'" << buffer <<  "\');";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status << "\',\'" << buffer << "\');";
         }
         else
         {
-            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status <<"\',\'" << buffer <<  "\'),";
+            sql << "(\'M" << list << "\',\'" << itMember.fullname << "\',\'" << itMember.username << "\',\'" << itMember.password << "\',\'" << itMember.status << "\',\'" << buffer << "\'),";
         }
         list++;
     }
@@ -210,11 +212,13 @@ bool app::editDataBuku(std::string input)
         if (textFormat(it.judul, "low") == textFormat(input, "low") || it.isbn == input)
         {
             std::cout << "\nData yang akan diedit" << std::endl;
+            std::cout << std::endl;
             std::cout << "Judul: " << it.judul << "\nPenulis: " << it.penulis << "\nTahun Terbit: " << it.tahunTerbit << "\nPenerbit: " << it.penerbit << "\nISBN: " << it.isbn << "\nStock: " << it.stock << std::endl;
 
             std::string judul, penulis, tahunTerbit, penerbit, ISBN, stock;
             std::cout << "\nMasukkan data baru" << std::endl;
-            std::cout << "NOTE: Silahkan diisi \"-\" jika tidak ingin mengubah datanya!" << std::endl;
+            std::cout << "Silahkan diisi \'-\' jika tidak ingin mengubah datanya" << std::endl;
+            std::cout << std::endl;
             std::cout << "Judul: ";
             getline(std::cin, judul);
             std::cout << "Penulis: ";
@@ -319,7 +323,9 @@ void app::tampilkanDataMember(int ukuranPage, int indexPage)
 
     for (int i = startIndex; i < endIndex && i < DataMember.size(); i++)
     {
-        std::cout << "\nNama Lengkap: " << DataMember[i].fullname << "\nUsername: " << DataMember[i].username << "\nPassword: " << DataMember[i].password << "\nStatus: " << DataMember[i].status << "\nJudul: " << DataMember[i].judul1 << ", " << DataMember[i].judul2 << ", " << DataMember[i].judul3 << std::endl;
+        std::cout << "-------------------------------" << std::endl;
+        std::cout << "Nama Lengkap: " << DataMember[i].fullname << "\nUsername: " << DataMember[i].username << "\nPassword: " << DataMember[i].password << "\nStatus: " << DataMember[i].status << "\nJudul: " << DataMember[i].judul1 << ", " << DataMember[i].judul2 << ", " << DataMember[i].judul3 << std::endl;
+        std::cout << "-------------------------------" << std::endl;
     }
 }
 void app::hapusDataMember(std::string username)
@@ -330,7 +336,8 @@ void app::hapusDataMember(std::string username)
         if (it.username == username)
         {
             DataMember.erase(DataMember.begin() + index);
-            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nStatus: " << it.status << std::endl;
+            std::cout << "Nama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nStatus: " << it.status << std::endl;
+            std::cout << std::endl;
             std::cout << "Data berhasil di hapus!" << std::endl;
             simpanDataMember();
             return;
@@ -346,12 +353,12 @@ void app::cariFilterDataMember(std::string input)
     {
         if (it.username == input && it.status != input)
         {
-            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: "<< it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
+            std::cout << "Nama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: " << it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
             return;
         }
         else if (it.username != input && it.status == input)
         {
-            std::cout << "\nNama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: "<< it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
+            std::cout << "Nama Lengkap: " << it.fullname << "\nUsername: " << it.username << "\nPassword: " << it.password << "\nStatus: " << it.status << "\nJudul: " << it.judul1 << ", " << it.judul2 << ", " << it.judul3 << std::endl;
             find = true;
         }
     }
@@ -409,7 +416,9 @@ void app::tampilkanDataBukuMember(int ukuranPage, int indexPage)
 
     for (int i = startIndex; i < endIndex && i < Data.size(); i++)
     {
+        std::cout << "-------------------------------" << std::endl;
         std::cout << "\nBuku " << i + 1 << "\nJudul: " << Data[i].judul << "\nPenulis: " << Data[i].penulis << "\nPenerbit: " << Data[i].penerbit << std::endl;
+        std::cout << "-------------------------------" << std::endl;
     }
 }
 void app::cariBukuMember(std::string input)
@@ -423,8 +432,9 @@ void app::cariBukuMember(std::string input)
         penulis = textFormat(it.penulis, "low") == textFormat(input, "low");
         if (judul || penulis)
         {
-            std::cout << "\nBuku " << index << "\nJudul: " << it.judul
-                      << "\nPenulis: " << it.penulis << "\nPenerbit: " << it.penerbit << std::endl;
+            std::cout << "-------------------------------" << std::endl;
+            std::cout << "Buku " << index << "\nJudul: " << it.judul << "\nPenulis: " << it.penulis << "\nPenerbit: " << it.penerbit << std::endl;
+            std::cout << "-------------------------------" << std::endl;
             find = true;
         }
         index++;
@@ -446,14 +456,22 @@ void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
                 if (textFormat(Data[i].judul, "low") == textFormat(judul, "low"))
                 {
                     textFormat(Data[i].judul, "cap");
-                    if(it.judul1.empty()){
+                    if (it.judul1.empty())
+                    {
                         DataMember[index].judul1 = Data[i].judul;
-                    }else if(it.judul2.empty()){
+                    }
+                    else if (it.judul2.empty())
+                    {
                         DataMember[index].judul2 = Data[i].judul;
-                    }else if(it.judul3.empty()){
+                    }
+                    else if (it.judul3.empty())
+                    {
                         DataMember[index].judul3 = Data[i].judul;
-                    }else{
+                    }
+                    else
+                    {
                         std::cout << "Hanya dapat meminjam 3 buku" << std::endl;
+                        std::cout << std::endl;
                         return;
                     }
                     Data[i].stock -= 1;
@@ -467,6 +485,7 @@ void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
         index++;
     }
     std::cout << "Buku yang dipinjam tidak ada" << std::endl;
+    std::cout << std::endl;
 }
 void app::kembalikanBukuMember(std::string activeMember, int id)
 {
@@ -522,8 +541,9 @@ void app::tampilkanBukuMember(std::string activeMember, int id)
                 std::cout << "Anda belum meminjam buku" << std::endl;
                 return;
             }
-            std::cout << "\n"
-                      << it.fullname << "\nJudul1: " << it.judul1 << "\nJudul2: " << it.judul2 << "\nJudul3: " << it.judul3 << std::endl;
+            std::cout << "-------------------------------" << std::endl;
+            std::cout << it.fullname << "\nJudul1: " << it.judul1 << "\nJudul2: " << it.judul2 << "\nJudul3: " << it.judul3 << std::endl;
+            std::cout << "-------------------------------" << std::endl;
             return;
         }
     }
@@ -660,10 +680,11 @@ void app::simpanDataMember()
     {
         std::replace(it.status.begin(), it.status.end(), ' ', '_');
         std::replace(it.fullname.begin(), it.fullname.end(), ' ', '_');
+        std::replace(it.username.begin(), it.username.end(), ' ', '_');
         std::replace(it.judul1.begin(), it.judul1.end(), ' ', '_');
         std::replace(it.judul2.begin(), it.judul2.end(), ' ', '_');
         std::replace(it.judul3.begin(), it.judul3.end(), ' ', '_');
-        saveMemberFile << it.id << " " << it.fullname + " " << it.username <<  " " << it.password << " " << it.status << " " << it.judul1 <<  " " << it.judul2 << " " << it.judul3 << std::endl;
+        saveMemberFile << it.id << " " << it.fullname + " " << it.username << " " << it.password << " " << it.status << " " << it.judul1 << " " << it.judul2 << " " << it.judul3 << std::endl;
     }
     saveMemberFile.close();
 }
@@ -718,8 +739,10 @@ int app::ambilJumlahDataMember()
 {
     return DataMember.size();
 }
-void app::errorcheck() {
-    for(auto it : DataMember) {
-        std::cout << it.status << " " << it.judul1 << " " << it.judul2 << " " << it.judul3 << " "  << std::endl;
+void app::errorcheck()
+{
+    for (auto it : DataMember)
+    {
+        std::cout << it.status << " " << it.judul1 << " " << it.judul2 << " " << it.judul3 << " " << std::endl;
     }
 }
