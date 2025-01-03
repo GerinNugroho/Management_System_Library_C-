@@ -1,8 +1,5 @@
 #include "./include/appUtils.h"
 
-using std::ifstream;
-using std::ofstream;
-
 // fitur untuk admin
 void app::tampilkanDataBuku(int ukuranPage, int indexPage)
 {
@@ -84,7 +81,7 @@ void app::exportDataBuku()
 
     std::remove("./buku.xls");
 
-    ofstream data("./buku.xls", std::ios::app);
+    std::ofstream data("./buku.xls", std::ios::app);
 
     data << "<?xml version=\"1.0\"?><?mso-application progid=\"Excel.Sheet\"?><Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
 
@@ -122,7 +119,7 @@ void app::exportDataMember()
 
     std::remove("./member.xls");
 
-    ofstream memberFile("./member.xls", std::ios::app);
+    std::ofstream memberFile("./member.xls", std::ios::app);
 
     memberFile << "<?xml version=\"1.0\"?><?mso-application progid=\"Excel.Sheet\"?><Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
 
@@ -163,7 +160,7 @@ void app::buatDatabase()
 
     std::remove("./library.sql");
 
-    ofstream sql("./library.sql", std::ios::app);
+    std::ofstream sql("./library.sql", std::ios::app);
 
     int list = 1;
 
@@ -270,7 +267,7 @@ void app::sortirDataBuku(char input)
 };
 bool app::inisialiasiAdmin()
 {
-    ifstream adminFile("./datas/admin.txt");
+    std::ifstream adminFile("./datas/admin.txt");
     bool status = false;
 
     if (adminFile.is_open())
@@ -289,7 +286,7 @@ void app::buatAdmin(std::string username, std::string password)
 {
     nameAdmin = username;
     passAdmin = password;
-    ofstream adminFile("./datas/admin.txt");
+    std::ofstream adminFile("./datas/admin.txt");
 
     std::replace(username.begin(), username.end(), ' ', '_');
     std::replace(password.begin(), password.end(), ' ', '_');
@@ -377,7 +374,7 @@ void app::daftarDataMember(std::string fullname, std::string username, std::stri
 
     DataMember.push_back({id, frmtFullname, username, password, status});
 
-    ofstream memberFile("./datas/member.txt", std::ios::app);
+    std::ofstream memberFile("./datas/member.txt", std::ios::app);
 
     std::replace(frmtFullname.begin(), frmtFullname.end(), ' ', '_');
     std::replace(username.begin(), username.end(), ' ', '_');
@@ -552,7 +549,7 @@ void app::tampilkanBukuMember(std::string activeMember, int id)
 // storage system
 void app::simpanDataBuku()
 {
-    ofstream saveDataFile("./datas/datas.txt");
+    std::ofstream saveDataFile("./datas/datas.txt");
     std::string bufferData;
     for (auto it : Data)
     {
@@ -567,7 +564,7 @@ void app::simpanDataBuku()
 }
 void app::ambilDataBuku()
 {
-    ifstream loadDataFile("./datas/datas.txt");
+    std::ifstream loadDataFile("./datas/datas.txt");
     Data.clear();
     std::string line;
     while (getline(loadDataFile, line))
@@ -613,7 +610,7 @@ void app::ambilDataBuku()
 };
 void app::ambilDataMember()
 {
-    ifstream loadMemberFile("./datas/member.txt");
+    std::ifstream loadMemberFile("./datas/member.txt");
 
     std::string line, word, fullname, username, password, status, judul1, judul2, judul3;
     int id, index;
@@ -674,7 +671,7 @@ void app::ambilDataMember()
 void app::simpanDataMember()
 {
     std::remove("./datas/member.txt");
-    ofstream saveMemberFile("./datas/member.txt", std::ios::app);
+    std::ofstream saveMemberFile("./datas/member.txt", std::ios::app);
 
     for (auto it : DataMember)
     {
@@ -690,7 +687,7 @@ void app::simpanDataMember()
 }
 void app::ambilDataAdmin()
 {
-    ifstream adminFile("./datas/admin.txt");
+    std::ifstream adminFile("./datas/admin.txt");
 
     std::string word;
     int index = 0;
