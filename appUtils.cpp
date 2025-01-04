@@ -468,11 +468,11 @@ void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
                     else
                     {
                         std::cout << "Hanya dapat meminjam 3 buku" << std::endl;
-                        std::cout << std::endl;
                         return;
                     }
                     Data[i].stock -= 1;
                     DataMember[index].status = "Meminjam";
+                    std::cout << "Peminjaman berhasil dilakukan dengan judul " << Data[i].judul << std::endl;
                     simpanDataBuku();
                     simpanDataMember();
                     return;
@@ -482,7 +482,6 @@ void app::pinjamBukuMember(std::string judul, std::string activeMember, int id)
         index++;
     }
     std::cout << "Buku yang dipinjam tidak ada" << std::endl;
-    std::cout << std::endl;
 }
 void app::kembalikanBukuMember(std::string activeMember, int id)
 {

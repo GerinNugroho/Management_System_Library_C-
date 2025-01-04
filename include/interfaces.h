@@ -608,6 +608,7 @@ public:
         getline(std::cin, password);
         utils.daftarDataMember(fullname, username, password);
         std::cout << std::endl;
+        idMember = utils.ambilIdMemberActive();
         std::cout << "Selamat anda telah terdaftar menjadi member" << std::endl;
         std::cout << std::endl;
         std::cout << "Tekan enter untuk lanjut...";
@@ -628,6 +629,7 @@ public:
         activeMember = username;
         if (!utils.masukMember(username, password))
         {
+            std::cout << std::endl;
             std::cout << "Gagal masuk kombinasi username dan password anda salah" << std::endl;
             status = false;
         }
@@ -785,6 +787,7 @@ public:
         getline(std::cin, judul);
         std::cout << std::endl;
         utils.pinjamBukuMember(judul, activeMember, idMember);
+        std::cout << std::endl;
         std::cout << "Tekan enter untuk lanjut...";
         std::cin.get();
         system("cls");
