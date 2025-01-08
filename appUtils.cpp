@@ -160,6 +160,12 @@ void app::buatDatabase()
 
     std::remove("./library.sql");
 
+    if (Data.empty() || DataMember.empty())
+    {
+        std::cout << "Silahkan isi dulu data buku dan member" << std::endl;
+        return;
+    }
+
     std::ofstream sql("./library.sql", std::ios::app);
 
     int list = 1;
@@ -199,6 +205,7 @@ void app::buatDatabase()
 
     sql << " ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`);ALTER TABLE `member` ADD PRIMARY KEY (`ID_MEMBER`); COMMIT;";
     sql.close();
+    std::cout << "Database telah berhasil di buat" << std::endl;
 }
 bool app::editDataBuku(std::string input)
 {

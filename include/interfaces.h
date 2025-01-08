@@ -476,7 +476,6 @@ public:
     void buatDatabaseSql()
     {
         utils.buatDatabase();
-        std::cout << "Database telah berhasil di buat" << std::endl;
         std::cin.ignore();
         std::cout << "Tekan enter untuk lanjut...";
         std::cin.get();
