@@ -197,7 +197,7 @@ void app::buatDatabase()
         list++;
     }
 
-    sql << "ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`);ALTER TABLE `member` ADD PRIMARY KEY (`ID_MEMBER`); COMMIT;";
+    sql << " ALTER TABLE `buku` ADD PRIMARY KEY (`ID_BUKU`);ALTER TABLE `member` ADD PRIMARY KEY (`ID_MEMBER`); COMMIT;";
     sql.close();
 }
 bool app::editDataBuku(std::string input)
