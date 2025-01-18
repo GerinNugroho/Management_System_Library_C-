@@ -124,7 +124,7 @@ public:
         std::cout << std::endl;
         std::cout << "Pilih dari menu: ";
         std::cin >> input;
-        ;
+        system("cls");
         return input;
     }
     void tambahDataBuku()
