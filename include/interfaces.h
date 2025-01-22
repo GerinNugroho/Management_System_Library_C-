@@ -559,7 +559,7 @@ public:
     void cariFilterDataMember()
     {
         system("cls");
-        std::cout << "Menghapus Data Member" << std::endl;
+        std::cout << "Mencari Data Member" << std::endl;
         std::cout << "_______________________________" << std::endl;
         std::cout << std::endl;
         std::cout << "Masukkan username/status: ";
